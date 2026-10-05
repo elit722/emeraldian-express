@@ -402,7 +402,7 @@ async function api(path,o={}){
  catch(e){const og=location.origin==='null'?'file://':location.origin;console.error('[api] échec réseau/CORS sur',path,'— origine à autoriser dans EXACT_ALLOWED_ORIGINS :',og,e);throw new Error('Connexion au serveur impossible depuis '+og+'. Réessaie ; si cela persiste, préviens le staff (adresse du site probablement absente de la liste CORS du Worker).')}
  let d=null;try{d=await r.json()}catch(e){}
  if(!r.ok){if(r.status===401&&t&&path!=='/auth/discord')drop();
-  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;throw x}
+  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;x.path=path;throw x}
  return d}
 function drop(){P.set(TK,'');me=null;curSid=null;auth();if(now==='account')acct()}
 function auth(){const b=$('#au');
@@ -594,6 +594,7 @@ async function send(t){const box=$('#f-'+t),st=box.querySelector('.st'),btn=box.
  catch(e){btn.disabled=false;let m=e.message;
   if(/Webhook non configur/i.test(m))m="Ce formulaire n'est pas encore configuré côté serveur (webhook Discord manquant). Préviens le staff.";
   if(e.status===409&&t!='aide'){gate(t);m=''}
+  if(e.status)m+=' [HTTP '+e.status+(e.code?' '+e.code:'')+' · '+e.path+']';
   st.textContent=m+(resv[t]?' — Ta place est réservée : clique de nouveau sur « Envoyer » (rien n\'est perdu tant que tu ne quittes pas la page).':'')}}
 document.addEventListener('click',e=>{const s=e.target.closest('[data-send]');if(s)send(s.dataset.send);
  if(e.target.closest('[data-login]'))login();const r=e.target.closest('[data-retry]');if(r)gate(r.dataset.retry);
