@@ -399,10 +399,10 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clea
 async function api(path,o={}){
  const t=P.get(TK);let r;
  try{r=await fetch(API+path,{method:o.method||'GET',headers:Object.assign({},o.body?{'Content-Type':'application/json'}:{},t?{Authorization:'Bearer '+t}:{}),body:o.body?JSON.stringify(o.body):undefined})}
- catch(e){const og=location.origin==='null'?'file://':location.origin;console.error('[api] échec réseau/CORS sur',path,'— origine à autoriser dans EXACT_ALLOWED_ORIGINS :',og,e);throw new Error('Connexion au serveur impossible depuis '+og+'. Réessaie ; si cela persiste, préviens le staff (adresse du site probablement absente de la liste CORS du Worker).')}
+ catch(e){console.error('[api]',path,e);throw new Error('Connexion au serveur impossible. Vérifie ta connexion ; si cela persiste, préviens le staff sur Discord.')}
  let d=null;try{d=await r.json()}catch(e){}
  if(!r.ok){if(r.status===401&&t&&path!=='/auth/discord')drop();
-  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;throw x}
+  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}throw new Error(m)}
  return d}
 function drop(){P.set(TK,'');me=null;curSid=null;auth();if(now==='account')acct()}
 function auth(){const b=$('#au');
@@ -451,19 +451,10 @@ $('#fLink').addEventListener('submit',async e=>{e.preventDefault();
 $('#lo').addEventListener('click',async()=>{try{if(curSid)await api('/me/sessions/'+encodeURIComponent(curSid),{method:'DELETE'})}catch(e){}drop();go('home')});
 $('#acLogin').addEventListener('click',login);
 $('#au').addEventListener('click',()=>P.get(TK)?go('account'):login());
-const FLAGMAP={lore:'lore',reglement:'reglement',partenaires:'partenaires',ajouts:'ajouts',about:'about',staff:'staff',aide:'aide',apply:'team'};
-let FLAGS=null;
-const flagOff=id=>!!(FLAGS&&FLAGMAP[id]&&FLAGS.sections&&FLAGS.sections[FLAGMAP[id]]===false);
-const FREE=['home','account','cgu','credits','info'];
-function applyFlags(){document.querySelectorAll('[data-go]').forEach(b=>{b.hidden=flagOff(b.dataset.go)});const k=document.querySelector('#au');if(k)k.hidden=false}
-const _show=show;show=function(id){
- if(flagOff(id)){toast('Cette section est momentanément indisponible.');id='home'}
- if(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(id)){toast('Connecte-toi avec Discord pour accéder à cette page.');id='account'}
- _show(id);const f={account:acct,partenaires:()=>gate('partner'),apply:()=>gate('team'),staff:()=>loadStaff(),aide:()=>prefill($('#g-aide'))}[id];if(f)f()};
-(async()=>{try{const r=await fetch(API+'/flags');if(r.ok){FLAGS=await r.json();applyFlags()}}catch(e){}
- const cb=await callback();
+const _show=show;show=function(id){_show(id);const f={account:acct,partenaires:()=>gate('partner'),apply:()=>gate('team'),staff:()=>loadStaff(),aide:()=>prefill($('#g-aide'))}[id];if(f)f()};
+(async()=>{const cb=await callback();
  if(P.get(TK)){try{me=await api('/me');auth()}catch(e){}}
- if(cb&&P.get(TK))show('account');else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(now)))show(now);else if(now==='account')acct()})();
+ if(cb&&P.get(TK))show('account');else if(now==='account')acct()})();
 </script>
 
 <script>
@@ -546,13 +537,13 @@ team:{b:"Envoyer ma candidature",w:"Cette candidature est définitive : elle ne 
  {h:"Ton rôle"},
  {k:"Rôle souhaité (1er choix)",t:"r",req:1,o:ROLES},
  {k:"Rôle souhaité (2e choix)",t:"s",o:["Passager","Détective","Coupable","Peu importe"]},
- {k:"Pourquoi ce rôle ?",t:"a",req:1,max:500},
+ {k:"Pourquoi ce rôle ?",t:"a",req:1},
  {h:"Ton personnage"},
  {k:"Nom du personnage",t:"t",req:1},{k:"Âge et origine",t:"t",req:1},
  {k:"Profession / statut à bord",t:"t",req:1,ph:"médecin, comtesse, journaliste…"},
  {k:"Trois traits de caractère",t:"t",req:1},
- {k:"Histoire et passé",t:"a",req:1,max:600},{k:"Secret ou motivation cachée",t:"a",req:1,max:500},
- {k:"Sa réaction s'il est accusé à tort",t:"a",max:400},{k:"Une scène que tu aimerais jouer à bord",t:"a",max:400},
+ {k:"Histoire et passé",t:"a",req:1},{k:"Secret ou motivation cachée",t:"a",req:1},
+ {k:"Sa réaction s'il est accusé à tort",t:"a"},{k:"Une scène que tu aimerais jouer à bord",t:"a"},
  {k:"Allié souhaité (pseudo, facultatif)",t:"t"},
  {k:"J'ai lu le règlement et j'accepte les CGU",t:"c",req:1}]}};
 function formHTML(t){const d=FORMS[t];let r='<div class="f w" id="f-'+t+'">';
@@ -571,30 +562,22 @@ const val=w=>{const t=w.dataset.t;if(t=='r'){const c=w.querySelector('input:chec
 function prefill(g){if(!g||!me)return;g.querySelectorAll('[data-pre]').forEach(w=>{const e=w.querySelector('input');if(e&&!e.value)e.value=(w.dataset.pre=='mc'?me.minecraft_username:me.pseudo)||''})}
 $('#g-aide').innerHTML=formHTML('aide');
 ['partner','team'].forEach(t=>{$('#g-'+t).innerHTML='<div class="pn" data-s="out"><p>Connexion Discord requise : elle garantit une seule candidature par compte.</p><button class="btn" data-login type="button">Connexion avec Discord</button></div><div class="pn" data-s="lock" hidden><h3>Candidature déjà envoyée</h3><p>Elle est définitive et a été transmise au staff. Il te répondra sur Discord.</p></div><div class="pn" data-s="err" hidden><p></p><button class="btn" data-retry="'+t+'" type="button">Réessayer</button></div><div data-s="form" hidden><p class="h">⚠ '+FORMS[t].w+'</p>'+formHTML(t)+'</div>'});
-let SUBP='/submissions/';
-async function subApi(t,o){try{return await api(SUBP+t,o)}catch(e){
- if(e.status===404&&e.code==='NOT_FOUND'&&SUBP==='/submissions/'){SUBP='/submission/';try{return await api(SUBP+t,o)}catch(e2){if(e2.status===404)SUBP='/submissions/';throw e2}}throw e}}
-const resv={};
 async function gate(t){const g=$('#g-'+t),k=P.get(TK),q=s=>g.querySelector('[data-s='+s+']');
  ['lock','err','form'].forEach(s=>q(s).hidden=true);q('out').hidden=!!k;if(!k)return;
  if(!me){try{me=await api('/me');auth()}catch(e){}}
- try{const s=await subApi(t);q('lock').hidden=!s.submitted;q('form').hidden=!!s.submitted;prefill(g)}
+ try{const s=await api('/submission/'+t);q('lock').hidden=!s.submitted;q('form').hidden=!!s.submitted;prefill(g)}
  catch(e){if(P.get(TK)){q('err').hidden=false;q('err').querySelector('p').textContent=e.message}else q('out').hidden=false}}
 async function send(t){const box=$('#f-'+t),st=box.querySelector('.st'),btn=box.querySelector('[data-send]'),body={};
  if(me)body['Compte RELINK']=me.pseudo+' ('+me.discord_id+')';
  for(const w of box.querySelectorAll('[data-k]')){const v=val(w);
   if(w.dataset.req&&!v){st.textContent='Champ obligatoire : '+w.dataset.k;w.scrollIntoView({block:'center'});return}
   if(v)body[w.dataset.k]=v}
- const tot=Object.entries(body).reduce((n,[k,v])=>n+k.length+String(v).length,0);
- if(tot>5200){st.textContent='Réponse trop longue ('+tot+' / 5200 caractères au total) : raccourcis certains champs.';return}
- btn.disabled=true;st.textContent='Envoi en cours…';
- try{if(t!='aide'&&!resv[t]){await subApi(t,{method:'POST',body:{}});resv[t]=1}
-  await api('/forms/'+t,{method:'POST',body});delete resv[t];st.textContent='';btn.disabled=false;toast('Envoyé, merci !');
+ btn.disabled=true;st.textContent='Envoi en cours…';let reserved=false;
+ try{if(t!='aide'){await api('/submission/'+t,{method:'POST',body:{}});reserved=true}
+  await api('/forms/'+t,{method:'POST',body});st.textContent='';btn.disabled=false;toast('Envoyé, merci !');
   if(t=='aide')box.querySelectorAll('input:not([type=checkbox]),textarea,select').forEach(e=>{if(!e.closest('[data-pre]'))e.value=''});else gate(t)}
- catch(e){btn.disabled=false;let m=e.message;
-  if(/Webhook non configur/i.test(m))m="Ce formulaire n'est pas encore configuré côté serveur (webhook Discord manquant). Préviens le staff.";
-  if(e.status===409&&t!='aide'){gate(t);m=''}
-  st.textContent=m+(resv[t]?' — Ta place est réservée : clique de nouveau sur « Envoyer » (rien n\'est perdu tant que tu ne quittes pas la page).':'')}}
+ catch(e){btn.disabled=false;
+  st.textContent=reserved?'Réservation faite mais envoi échoué : préviens le staff via « Aide ». ('+e.message+')':e.message}}
 document.addEventListener('click',e=>{const s=e.target.closest('[data-send]');if(s)send(s.dataset.send);
  if(e.target.closest('[data-login]'))login();const r=e.target.closest('[data-retry]');if(r)gate(r.dataset.retry);
  const tb=e.target.closest('[data-tab]');if(tb){const w=tb.closest('.wrap');w.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b===tb));w.querySelectorAll('.tp').forEach(p=>p.classList.toggle('on',p.id===tb.dataset.tab));watch()}
