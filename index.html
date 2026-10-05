@@ -863,14 +863,14 @@ async function loadStaff(){
  cards.forEach(c=>{const u=cache[c.dataset.keys];if(u){const a=c.querySelector('.av');a.innerHTML='<img alt="" src="'+A(u)+'">';a.classList.add('rl')}})}
 $('#parB').innerHTML=PARTNERS.map(p=>'<div class="card"><div class="av'+(p.sq?' sq':'')+'"><img alt="" src="'+IMG[p.i]+'"></div><span class="tag">'+A(p.b)+'</span><h3>'+A(p.n)+'</h3><p>'+A(p.d)+'</p><div class="links">'+p.l.map(l=>'<a class="mini" href="'+A(l[1])+'" target="_blank" rel="noopener">'+A(l[0])+'</a>').join('')+'</div></div>').join('');
 $('#addB').innerHTML=ADDS.map(a=>'<div class="card"><span class="tag">'+A(a[0])+'</span><h3>'+A(a[1])+'</h3><p>'+A(a[2])+'</p>'+(a[3]==='music'?'<button type="button" class="btn amb" id="amB" aria-pressed="false"><span class="amI" aria-hidden="true">▶</span> <span class="amT">Écouter la musique</span></button>':'')+'</div>').join('');
-(function(){const b=$('#amB');if(!b)return;let au=null,token=0,stopping=false;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
+(function(){const b=$('#amB');if(!b)return;let au=null,token=0;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
  const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':'Écouter la musique'};
- const stop=()=>{const my=++token;stopping=true;releaseForeground('event-music');ui(false);if(au)fadeAudio(au,0,180,()=>{if(my===token){au.pause();au.currentTime=0;stopping=false}})};
- const ended=()=>{token++;stopping=false;if(au){cancelAudioFade(au);au.volume=0}releaseForeground('event-music');ui(false)};
+ const stop=()=>{token++;if(au){cancelAudioFade(au);au.pause();au.currentTime=0;au.volume=0}releaseForeground('event-music');ui(false)};
+ const ended=()=>{token++;if(au){cancelAudioFade(au);au.volume=0}releaseForeground('event-music');ui(false)};
  b.addEventListener('click',()=>{
   if(!EVENT_MUSIC){T.textContent='Bientôt disponible';setTimeout(()=>ui(false),2200);return}
   if(!au){au=new Audio(EVENT_MUSIC);au.preload='none';au.volume=0;au.addEventListener('ended',ended);au.addEventListener('error',()=>{stop();T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200)})}
-  if(au.paused||stopping){const my=++token;stopping=false;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,1)}}).catch(()=>{if(my===token)stop()})}
+  if(au.paused){const my=++token;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,1)}}).catch(()=>{if(my===token)stop()})}
   else stop()});
  new MutationObserver(()=>{if(au&&!au.paused&&!$('#ajouts').classList.contains('on'))stop()}).observe($('#ajouts'),{attributes:true,attributeFilter:['class']});
 })();
@@ -979,7 +979,7 @@ const twSrc=ch=>'https://player.twitch.tv/?channel='+encodeURIComponent(ch)+twPa
   audio.play().then(()=>{if(my===token&&state==='play')fadeAudio(audio,1)}).catch(()=>{if(my===token)stop()})}
  bP.addEventListener('click',()=>{
   if(state==='idle')play();
-  else if(state==='play'){const my=++token;state='pause';ui();fadeAudio(audio,0,180,()=>{if(my===token&&state==='pause'){audio.pause();releaseForeground('lore')}})}
+  else if(state==='play'){token++;state='pause';cancelAudioFade(audio);audio.pause();audio.volume=0;releaseForeground('lore');ui()}
   else play()});
  bS.addEventListener('click',stop);
  new MutationObserver(()=>{if(!$('#lore').classList.contains('on')&&state!=='idle')stop()}).observe($('#lore'),{attributes:true,attributeFilter:['class']});
