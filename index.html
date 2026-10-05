@@ -32,8 +32,6 @@ nav button.nlv i{width:.55rem;height:.55rem;border-radius:50%;background:#ff4560
 .lrd .btn .lric{display:inline-block;width:1.2em;text-align:center}
 .lrd .btn[aria-pressed=true]{background:var(--brass);color:var(--ink)}
 .lrs{width:2.8rem;height:2.8rem;border:1px solid var(--brass);background:rgba(20,9,8,.5);color:var(--brass);cursor:pointer;font-size:1rem}.lrs[hidden]{display:none}.lrs:hover{background:var(--brass);color:var(--ink)}
-.lrv{display:inline-flex;align-items:center;gap:.5rem;color:var(--fog);font:1.05rem "IM Fell English SC",serif}
-.lrv select{background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--paper);padding:.3rem .5rem;font:1rem "Cormorant Garamond",Georgia,serif}
 #loreB .rd{background:rgba(200,164,85,.14);box-shadow:-.6rem 0 0 rgba(200,164,85,.14),.6rem 0 0 rgba(200,164,85,.14);transition:background .3s}
 .card .amb{margin-top:.9rem;font-size:1.05rem;padding:.55rem 1.3rem}.card .amb[aria-pressed=true]{background:var(--brass);color:var(--ink)}.amI{display:inline-block;width:1.2em;text-align:center}
 .page{display:none;min-height:100vh}
@@ -470,7 +468,7 @@ header.hide+#mini{top:calc(env(safe-area-inset-top,0px) + .8rem)}
 <div class="shg" id="shG"></div>
 </div></section>
 <section id="live" class="page"><div class="wrap"><h2>Live</h2><div class="rule"></div><p class="lead">Les chaînes Twitch des participants. Tous les lives sont coupés par défaut ; utilise « Mettre en principal » pour agrandir une chaîne en haut de la page.</p><div class="lvg" id="lvL"></div></div></section>
-<section id="lore" class="page"><div class="wrap"><h2>Lore</h2><div class="rule"></div><div class="lrd" id="lrd" hidden><button type="button" class="btn" id="lrP" aria-pressed="false"><span class="lric" aria-hidden="true">▶</span> <span class="lrtx">Écouter le lore</span></button><button type="button" class="lrs" id="lrS" aria-label="Arrêter la lecture" title="Arrêter" hidden>■</button><label class="lrv"><span>Vitesse</span><select id="lrR" aria-label="Vitesse de lecture"><option value="0.85">Lente</option><option value="1" selected>Normale</option><option value="1.15">Rapide</option></select></label></div><div id="loreB"></div></div></section>
+<section id="lore" class="page"><div class="wrap"><h2>Lore</h2><div class="rule"></div><div class="lrd" id="lrd" hidden><button type="button" class="btn" id="lrP" aria-pressed="false"><span class="lric" aria-hidden="true">▶</span> <span class="lrtx">Écouter le lore</span></button><button type="button" class="lrs" id="lrS" aria-label="Arrêter la lecture" title="Arrêter" hidden>■</button></div><div id="loreB"></div></div></section>
 <section id="reglement" class="page"><div class="wrap"><h2>Règlement</h2><div class="rule"></div><p class="lead" id="lawLead"></p><div class="lawbar"><div class="sw" id="lawTg" role="group" aria-label="Style du règlement"><button type="button" data-st="v">Français d'époque</button><button type="button" data-st="n">Français courant</button></div></div><div class="f" style="margin-bottom:1.5rem"><input id="lawQ" type="search" placeholder="Rechercher un article, un mot-clé…" autocomplete="off"></div><div id="lawB"></div><p class="lead" id="lawN" hidden>Aucun article trouvé.</p></div></section>
 <section id="ajouts" class="page"><div class="wrap"><h2>Nos ajouts</h2><div class="rule"></div><p class="lead">Ce que nous avons conçu spécialement pour cet événement.</p><div class="grid" id="addB"></div></div></section>
 <section id="partenaires" class="page"><div class="wrap"><h2>Partenaires</h2><div class="rule"></div><p class="lead">L'événement ne serait pas possible sans le soutien de ces organisations et créateurs.</p><div class="grid" id="parB"></div><h3 class="sec">Devenir partenaire ?</h3><p class="lead">Créateur, studio ou communauté intéressé ? Remplis ce formulaire, nous te répondrons sur Discord.</p><div id="g-partner"></div></div></section>
@@ -573,7 +571,7 @@ fetch('Assets/Son/dies_irae.mp3').then(r=>r.arrayBuffer()).then(data=>ac.decodeA
 function vol(){if(ac){ac.resume();out.gain.setTargetAtTime(muted||foreground?0:.6,ac.currentTime,.28)}}
 function claimForeground(owner,stop){if(foreground&&foreground.owner!==owner){const previous=foreground;foreground=null;previous.stop()}foreground={owner,stop};begin();vol()}
 function releaseForeground(owner){if(foreground&&foreground.owner===owner){foreground=null;vol()}}
-const audioFades=new WeakMap();function fadeAudio(a,to,duration=260,done){const previous=audioFades.get(a);if(previous)cancelAnimationFrame(previous);const from=a.volume,start=performance.now(),ms=still?0:duration;function step(now){const p=ms?Math.min(1,(now-start)/ms):1;a.volume=from+(to-from)*p;if(p<1)audioFades.set(a,requestAnimationFrame(step));else{audioFades.delete(a);if(done)done()}}audioFades.set(a,requestAnimationFrame(step))}
+const audioFades=new WeakMap();function cancelAudioFade(a){const id=audioFades.get(a);if(id!==undefined)cancelAnimationFrame(id);audioFades.delete(a)}function fadeAudio(a,to,duration=260,done){cancelAudioFade(a);const from=a.volume,start=performance.now(),ms=still?0:duration;function step(now){const p=ms?Math.min(1,(now-start)/ms):1;a.volume=from+(to-from)*p;if(p<1)audioFades.set(a,requestAnimationFrame(step));else{audioFades.delete(a);if(done)done()}}audioFades.set(a,requestAnimationFrame(step))}
 addEventListener('pointerdown',()=>{if(!muted)begin()},{once:true});
 bm.addEventListener('click',()=>{muted=!muted;P.set('mute',muted?1:0);mark();begin();vol()});
 /* diaporama d'accueil */
@@ -865,14 +863,14 @@ async function loadStaff(){
  cards.forEach(c=>{const u=cache[c.dataset.keys];if(u){const a=c.querySelector('.av');a.innerHTML='<img alt="" src="'+A(u)+'">';a.classList.add('rl')}})}
 $('#parB').innerHTML=PARTNERS.map(p=>'<div class="card"><div class="av'+(p.sq?' sq':'')+'"><img alt="" src="'+IMG[p.i]+'"></div><span class="tag">'+A(p.b)+'</span><h3>'+A(p.n)+'</h3><p>'+A(p.d)+'</p><div class="links">'+p.l.map(l=>'<a class="mini" href="'+A(l[1])+'" target="_blank" rel="noopener">'+A(l[0])+'</a>').join('')+'</div></div>').join('');
 $('#addB').innerHTML=ADDS.map(a=>'<div class="card"><span class="tag">'+A(a[0])+'</span><h3>'+A(a[1])+'</h3><p>'+A(a[2])+'</p>'+(a[3]==='music'?'<button type="button" class="btn amb" id="amB" aria-pressed="false"><span class="amI" aria-hidden="true">▶</span> <span class="amT">Écouter la musique</span></button>':'')+'</div>').join('');
-(function(){const b=$('#amB');if(!b)return;let au=null,token=0;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
+(function(){const b=$('#amB');if(!b)return;let au=null,token=0,stopping=false;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
  const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':'Écouter la musique'};
- const stop=()=>{token++;if(au){fadeAudio(au,0,220,()=>{au.pause();au.currentTime=0})}releaseForeground('event-music');ui(false)};
- const ended=()=>{token++;releaseForeground('event-music');ui(false)};
+ const stop=()=>{const my=++token;stopping=true;releaseForeground('event-music');ui(false);if(au)fadeAudio(au,0,180,()=>{if(my===token){au.pause();au.currentTime=0;stopping=false}})};
+ const ended=()=>{token++;stopping=false;if(au){cancelAudioFade(au);au.volume=0}releaseForeground('event-music');ui(false)};
  b.addEventListener('click',()=>{
   if(!EVENT_MUSIC){T.textContent='Bientôt disponible';setTimeout(()=>ui(false),2200);return}
   if(!au){au=new Audio(EVENT_MUSIC);au.preload='none';au.volume=0;au.addEventListener('ended',ended);au.addEventListener('error',()=>{stop();T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200)})}
-  if(au.paused){const my=++token;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,1)}}).catch(()=>{if(my===token)stop()})}
+  if(au.paused||stopping){const my=++token;stopping=false;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,1)}}).catch(()=>{if(my===token)stop()})}
   else stop()});
  new MutationObserver(()=>{if(au&&!au.paused&&!$('#ajouts').classList.contains('on'))stop()}).observe($('#ajouts'),{attributes:true,attributeFilter:['class']});
 })();
@@ -968,23 +966,22 @@ const twSrc=ch=>'https://player.twitch.tv/?channel='+encodeURIComponent(ch)+twPa
 (function(){
  const box=$('#lrd');if(!box)return;
  box.hidden=false;
- const bP=$('#lrP'),bS=$('#lrS'),sel=$('#lrR'),ic=bP.querySelector('.lric'),tx=bP.querySelector('.lrtx');
+ const bP=$('#lrP'),bS=$('#lrS'),ic=bP.querySelector('.lric'),tx=bP.querySelector('.lrtx');
  const audio=new Audio('Assets/Son/lorevocal.mp3');audio.preload='none';audio.volume=0;
  let state='idle',token=0;
  function ui(){const on=state==='play',paused=state==='pause';bP.setAttribute('aria-pressed',on);ic.textContent=on?'❚❚':'▶';
   tx.textContent=on?'Pause':paused?'Reprendre':'Écouter le lore';bS.hidden=state==='idle'}
- function stop(){token++;state='idle';releaseForeground('lore');ui();fadeAudio(audio,0,220,()=>{audio.pause();audio.currentTime=0})}
- function ended(){token++;state='idle';releaseForeground('lore');ui()}
+ function stop(){token++;state='idle';cancelAudioFade(audio);audio.pause();audio.currentTime=0;audio.volume=0;releaseForeground('lore');ui()}
+ function ended(){token++;state='idle';cancelAudioFade(audio);audio.volume=0;releaseForeground('lore');ui()}
  audio.addEventListener('ended',ended);
  audio.addEventListener('error',()=>{stop();tx.textContent='Lecture impossible';setTimeout(ui,2200)});
- function play(){const my=++token;audio.volume=0;audio.playbackRate=+sel.value||1;state='play';ui();claimForeground('lore',stop);
+ function play(){const my=++token;cancelAudioFade(audio);if(audio.ended)audio.currentTime=0;audio.volume=0;audio.playbackRate=1;state='play';ui();claimForeground('lore',stop);
   audio.play().then(()=>{if(my===token&&state==='play')fadeAudio(audio,1)}).catch(()=>{if(my===token)stop()})}
  bP.addEventListener('click',()=>{
   if(state==='idle')play();
-  else if(state==='play'){state='pause';ui();fadeAudio(audio,0,220,()=>{audio.pause();releaseForeground('lore')})}
+  else if(state==='play'){const my=++token;state='pause';ui();fadeAudio(audio,0,180,()=>{if(my===token&&state==='pause'){audio.pause();releaseForeground('lore')}})}
   else play()});
  bS.addEventListener('click',stop);
- sel.addEventListener('change',()=>{audio.playbackRate=+sel.value||1});
  new MutationObserver(()=>{if(!$('#lore').classList.contains('on')&&state!=='idle')stop()}).observe($('#lore'),{attributes:true,attributeFilter:['class']});
  addEventListener('pagehide',()=>{audio.pause();releaseForeground('lore')});
 })();
