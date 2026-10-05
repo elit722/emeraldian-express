@@ -27,15 +27,6 @@ nav button.nlv:hover,nav button.nlv.on{border-color:#ff5a6e;background:rgba(232,
 nav button.nlv i{width:.55rem;height:.55rem;border-radius:50%;background:#ff4560;box-shadow:0 0 0 0 rgba(255,69,96,.7);animation:nlvP 1.8s ease-out infinite}
 @keyframes nlvP{0%{box-shadow:0 0 0 0 rgba(255,69,96,.7)}70%,100%{box-shadow:0 0 0 .5rem rgba(255,69,96,0)}}
 @media(prefers-reduced-motion:reduce){nav button.nlv i{animation:none!important}}
-.lrd{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.8rem 1rem;margin:0 0 2rem}
-.lrd[hidden]{display:none}
-.lrd .btn .lric{display:inline-block;width:1.2em;text-align:center}
-.lrd .btn[aria-pressed=true]{background:var(--brass);color:var(--ink)}
-.lrs{width:2.8rem;height:2.8rem;border:1px solid var(--brass);background:rgba(20,9,8,.5);color:var(--brass);cursor:pointer;font-size:1rem}.lrs[hidden]{display:none}.lrs:hover{background:var(--brass);color:var(--ink)}
-.lrv{display:inline-flex;align-items:center;gap:.5rem;color:var(--fog);font:1.05rem "IM Fell English SC",serif}
-.lrv select{background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--paper);padding:.3rem .5rem;font:1rem "Cormorant Garamond",Georgia,serif}
-#loreB .rd{background:rgba(200,164,85,.14);box-shadow:-.6rem 0 0 rgba(200,164,85,.14),.6rem 0 0 rgba(200,164,85,.14);transition:background .3s}
-.card .amb{margin-top:.9rem;font-size:1.05rem;padding:.55rem 1.3rem}.card .amb[aria-pressed=true]{background:var(--brass);color:var(--ink)}.amI{display:inline-block;width:1.2em;text-align:center}
 .page{display:none;min-height:100vh}
 .page.on{display:block;animation:enter 1s ease both}
 @keyframes enter{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
@@ -470,7 +461,7 @@ header.hide+#mini{top:calc(env(safe-area-inset-top,0px) + .8rem)}
 <div class="shg" id="shG"></div>
 </div></section>
 <section id="live" class="page"><div class="wrap"><h2>Live</h2><div class="rule"></div><p class="lead">Les chaînes Twitch des participants. Tous les lives sont coupés par défaut ; utilise « Mettre en principal » pour agrandir une chaîne en haut de la page.</p><div class="lvg" id="lvL"></div></div></section>
-<section id="lore" class="page"><div class="wrap"><h2>Lore</h2><div class="rule"></div><div class="lrd" id="lrd" hidden><button type="button" class="btn" id="lrP" aria-pressed="false"><span class="lric" aria-hidden="true">▶</span> <span class="lrtx">Écouter le lore</span></button><button type="button" class="lrs" id="lrS" aria-label="Arrêter la lecture" title="Arrêter" hidden>■</button><label class="lrv"><span>Vitesse</span><select id="lrR" aria-label="Vitesse de lecture"><option value="0.85">Lente</option><option value="1" selected>Normale</option><option value="1.15">Rapide</option></select></label></div><div id="loreB"></div></div></section>
+<section id="lore" class="page"><div class="wrap"><h2>Lore</h2><div class="rule"></div><div id="loreB"></div></div></section>
 <section id="reglement" class="page"><div class="wrap"><h2>Règlement</h2><div class="rule"></div><p class="lead" id="lawLead"></p><div class="lawbar"><div class="sw" id="lawTg" role="group" aria-label="Style du règlement"><button type="button" data-st="v">Français d'époque</button><button type="button" data-st="n">Français courant</button></div></div><div class="f" style="margin-bottom:1.5rem"><input id="lawQ" type="search" placeholder="Rechercher un article, un mot-clé…" autocomplete="off"></div><div id="lawB"></div><p class="lead" id="lawN" hidden>Aucun article trouvé.</p></div></section>
 <section id="ajouts" class="page"><div class="wrap"><h2>Nos ajouts</h2><div class="rule"></div><p class="lead">Ce que nous avons conçu spécialement pour cet événement.</p><div class="grid" id="addB"></div></div></section>
 <section id="partenaires" class="page"><div class="wrap"><h2>Partenaires</h2><div class="rule"></div><p class="lead">L'événement ne serait pas possible sans le soutien de ces organisations et créateurs.</p><div class="grid" id="parB"></div><h3 class="sec">Devenir partenaire ?</h3><p class="lead">Créateur, studio ou communauté intéressé ? Remplis ce formulaire, nous te répondrons sur Discord.</p><div id="g-partner"></div></div></section>
@@ -825,9 +816,7 @@ function renderInfo(){return INFOS.map((s,si)=>{let h='<h3 class="isec">'+A(s.t)
  else if(s.t=='Map & Monde')h+='<div class="tk"><div class="tk-main"><div class="tk-hd"><span>Plan du train</span><i>Carte sur mesure</i></div><dl>'+s.i.map(tkRow).join('')+'</dl></div></div>';
  else h+='<div class="grid">'+s.i.map((x,i)=>{const td=x[2]&&!/\d/.test(x[1]);return'<div class="card"><span class="no">'+rmn(i+1)+'</span><h3>'+A(x[0])+'</h3><p'+(td?' class="todo"':'')+'>'+A(x[1])+'</p>'+(x[3]?'<div class="links"><button class="mini" data-to="'+x[3]+'">'+A(x[4])+'</button></div>':'')+'</div>'}).join('')+'</div>';
  return h}).join('')}
-/* Musique originale de l'événement : renseigne ici l'URL ou le chemin du fichier audio (mp3, ogg…) */
-const EVENT_MUSIC='';
-const ADDS=[["Musique","Musique originale","Les ambiances et compositions sonores de l'événement, créées par Paco pour accompagner le voyage.","music"],["À annoncer","Ajout à définir","Le contenu varie selon l'événement."],["Web","Ce site","Conçu et développé pour l'événement : lore, règlement, candidatures, partenaires et compte joueur au même endroit."]];
+const ADDS=[["À annoncer","Ajout à définir","Chaque carte se compose d'un tag, d'un titre et d'un texte."],["À annoncer","Ajout à définir","Le contenu varie selon l'événement."],["Web","Ce site","Conçu et développé pour l'événement : lore, règlement, candidatures, partenaires et compte joueur au même endroit."]];
 const PARTNERS=[
 {n:"Stellar Group",b:"Organisation",d:"Constellation d'organisations créatives et gaming, co-fondée par Elit722.",i:"stellar",sq:1,l:[["Discord","https://discord.gg/eMqMgzvh6t"]]},
 {n:"Zenh",b:"Créateur",d:"Créateur de contenu et partenaire actif de l'événement.",i:"zenh",l:[["YouTube","https://youtube.com/@JustZenh"],["Discord ReCraft","https://discord.gg/dXWHKbse5M"]]},
@@ -863,16 +852,7 @@ async function loadStaff(){
  try{sessionStorage.setItem('tlv_staff',JSON.stringify(cache))}catch(e){}
  cards.forEach(c=>{const u=cache[c.dataset.keys];if(u){const a=c.querySelector('.av');a.innerHTML='<img alt="" src="'+A(u)+'">';a.classList.add('rl')}})}
 $('#parB').innerHTML=PARTNERS.map(p=>'<div class="card"><div class="av'+(p.sq?' sq':'')+'"><img alt="" src="'+IMG[p.i]+'"></div><span class="tag">'+A(p.b)+'</span><h3>'+A(p.n)+'</h3><p>'+A(p.d)+'</p><div class="links">'+p.l.map(l=>'<a class="mini" href="'+A(l[1])+'" target="_blank" rel="noopener">'+A(l[0])+'</a>').join('')+'</div></div>').join('');
-$('#addB').innerHTML=ADDS.map(a=>'<div class="card"><span class="tag">'+A(a[0])+'</span><h3>'+A(a[1])+'</h3><p>'+A(a[2])+'</p>'+(a[3]==='music'?'<button type="button" class="btn amb" id="amB" aria-pressed="false"><span class="amI" aria-hidden="true">▶</span> <span class="amT">Écouter la musique</span></button>':'')+'</div>').join('');
-(function(){const b=$('#amB');if(!b)return;let au=null;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
- const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':'Écouter la musique'};
- const off=()=>{ui(false);vol()};
- b.addEventListener('click',()=>{
-  if(!EVENT_MUSIC){T.textContent='Bientôt disponible';setTimeout(()=>ui(false),2200);return}
-  if(!au){au=new Audio(EVENT_MUSIC);au.preload='none';au.addEventListener('ended',off);au.addEventListener('error',()=>{ui(false);T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200);vol()})}
-  if(au.paused){if(ac&&out)out.gain.setTargetAtTime(0,ac.currentTime,.3);au.play().then(()=>ui(true)).catch(off)}else{au.pause();off()}});
- new MutationObserver(()=>{if(au&&!au.paused&&!$('#ajouts').classList.contains('on')){au.pause();off()}}).observe($('#ajouts'),{attributes:true,attributeFilter:['class']});
-})();
+$('#addB').innerHTML=ADDS.map(a=>'<div class="card"><span class="tag">'+A(a[0])+'</span><h3>'+A(a[1])+'</h3><p>'+A(a[2])+'</p></div>').join('');
 $('#loreB').innerHTML=LORE.map(c=>'<div class="lb"><small>'+A(c.d)+'</small>'+c.p.map(t=>'<p>'+A(t)+'</p>').join('')+(c.q?'<blockquote>« '+A(c.q)+' »</blockquote>':'')+'</div>').join('');
 
 $('#infB').innerHTML=renderInfo();
@@ -959,38 +939,6 @@ const twSrc=ch=>'https://player.twitch.tv/?channel='+encodeURIComponent(ch)+twPa
  const end=()=>{d=null;H.classList.remove('drag')};
  H.addEventListener('pointerup',end);H.addEventListener('pointercancel',end);
  addEventListener('resize',clamp);
-})();
-
-/* ── Lore : lecture à voix haute (synthèse vocale du navigateur) ── */
-(function(){
- const ss=window.speechSynthesis,box=$('#lrd');if(!ss||!window.SpeechSynthesisUtterance||!box)return;
- box.hidden=false;
- const bP=$('#lrP'),bS=$('#lrS'),sel=$('#lrR'),ic=bP.querySelector('.lric'),tx=bP.querySelector('.lrtx');
- let segs=[],i=0,state='idle',tok=0,voice=null;
- const pick=()=>{const v=ss.getVoices().filter(x=>/^fr/i.test(x.lang));
-  voice=v.find(x=>/fr[-_]FR/i.test(x.lang)&&/natural|google|thomas|denise|henri|eloise|audrey|amelie|amélie/i.test(x.name))||v.find(x=>/fr[-_]FR/i.test(x.lang))||v[0]||null};
- pick();if(ss.onvoiceschanged!==undefined)ss.addEventListener('voiceschanged',pick);
- function build(){segs=[];$$('#loreB .lb').forEach(b=>b.querySelectorAll('small,p,blockquote').forEach(el=>{
-  const t=el.textContent.replace(/[«»]/g,'').replace(/\s+/g,' ').trim();if(!t)return;
-  let cur='';(t.match(/[^.!?…]+[.!?…]*\s*/g)||[t]).forEach(p=>{if((cur+p).length>200&&cur){segs.push({el,t:cur.trim()});cur=p}else cur+=p});
-  if(cur.trim())segs.push({el,t:cur.trim()})}))}
- function ui(){const on=state==='play',ps=state==='pause';bP.setAttribute('aria-pressed',on);ic.textContent=on?'❚❚':'▶';
-  tx.textContent=on?'Pause':ps?'Reprendre':'Écouter le lore';bS.hidden=state==='idle'}
- function mark(el){$$('#loreB .rd').forEach(x=>x.classList.remove('rd'));if(el)el.classList.add('rd')}
- function say(){const my=tok;if(i>=segs.length){stop();return}
-  const g=segs[i],u=new SpeechSynthesisUtterance(g.t);u.lang='fr-FR';if(voice)u.voice=voice;u.rate=+sel.value||1;
-  u.onstart=()=>{if(my===tok){mark(g.el);if(!g.el.dataset.seen||segs[i-1]?.el!==g.el)g.el.scrollIntoView({behavior:still?'auto':'smooth',block:'center'});g.el.dataset.seen=1}};
-  u.onend=()=>{if(my===tok){i++;say()}};u.onerror=e=>{if(my===tok&&e.error!=='interrupted'&&e.error!=='canceled'){stop()}};
-  ss.speak(u)}
- function stop(){tok++;ss.cancel();state='idle';i=0;mark(null);ui()}
- bP.addEventListener('click',()=>{
-  if(state==='idle'){build();if(!segs.length)return;i=0;state='play';ui();tok++;ss.cancel();say()}
-  else if(state==='play'){ss.pause();state='pause';ui()}
-  else{ss.resume();state='play';ui()}});
- bS.addEventListener('click',stop);
- sel.addEventListener('change',()=>{if(state!=='idle'){const my=++tok;ss.cancel();if(state==='pause')state='play';ui();say()}});
- new MutationObserver(()=>{if(!$('#lore').classList.contains('on')&&state!=='idle')stop()}).observe($('#lore'),{attributes:true,attributeFilter:['class']});
- addEventListener('pagehide',()=>ss.cancel());
 })();
 
 /* ── Formulaires → Worker (/forms/:type) ── */
