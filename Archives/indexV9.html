@@ -365,57 +365,6 @@ header.hide+#mini{top:calc(env(safe-area-inset-top,0px) + .8rem)}
 .twb{aspect-ratio:16/9;background:#000}.twb iframe{width:100%;height:100%;border:0;display:block}
 .twv{display:block;text-align:center;padding:.4rem;color:var(--brass);font:1rem "IM Fell English SC",serif;text-decoration:none;border-top:1px solid var(--line)}.twv:hover{background:var(--brass);color:var(--ink)}
 @media(max-width:700px){.tr2{grid-template-columns:1fr}.shtools .sw button{padding:.45rem .8rem;font-size:.95rem}.lvc.main{grid-column:auto}}
-/* ── Mobile : boutons plus grands, mieux organisés (override) ── */
-@media(max-width:700px){
-button,.btn,.mini,.lrs,.tabs button,.sw button{min-height:48px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.lk{min-height:0}
-/* Onglets : grille 2 colonnes pleine largeur au lieu d'une pile de petits boutons */
-.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin-bottom:1.5rem}
-.tabs button{width:100%;padding:.7rem .6rem;font-size:1.15rem;line-height:1.15;display:flex;align-items:center;justify-content:center;text-align:center}
-.tabs button:last-child:nth-child(odd){grid-column:1/-1}
-/* Groupes de filtres / bascules : défilement horizontal, une seule ligne */
-.sw,.shtools .sw{display:flex;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
-.sw::-webkit-scrollbar{display:none}
-.sw button,.shtools .sw button{flex:0 0 auto;white-space:nowrap;padding:.6rem 1.1rem;font-size:1.1rem;scroll-snap-align:start}
-.lawbar{display:block}.lawbar .sw{display:grid;grid-template-columns:1fr 1fr;border-radius:14px;overflow:hidden}
-.lawbar .sw button{white-space:normal;line-height:1.15;padding:.6rem .5rem}
-.shtools{flex-direction:column;align-items:stretch;gap:.8rem}
-.shtools input{width:100%}
-.shcols{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
-.shcols button{min-width:48px}
-/* Rangées d'actions : boutons pleine largeur, bien espacés */
-.row{flex-direction:column;align-items:stretch;gap:.8rem}
-.row .btn,.row button{width:100%;text-align:center}
-.lrd{flex-direction:column;align-items:stretch;gap:.8rem}
-.lrd .btn{width:100%;text-align:center}
-.lrs{width:3rem;height:3rem;align-self:center}
-.btn,.card .amb{display:flex;align-items:center;justify-content:center;gap:.4rem;text-align:center;width:100%}
-.hero .btn{width:auto;display:inline-flex;padding:.9rem 2.2rem}
-.btn:hover{letter-spacing:normal}
-.mini{padding:.6rem 1rem;font-size:1.1rem}
-.card .amb{font-size:1.15rem;padding:.7rem 1rem}
-/* Contrôles flottants : côte à côte, grands, sans masquer le contenu */
-#ctl{left:.8rem;right:.8rem;gap:.6rem;flex-wrap:nowrap}
-#ctl button{flex:1 1 0;min-height:48px;padding:.6rem .8rem;font-size:1.1rem;white-space:nowrap}
-/* Formulaires */
-.f input,.f select,.f textarea{min-height:48px}
-button[data-send]{width:100%}
-}
-@media(max-width:360px){.tabs{grid-template-columns:1fr}}
-/* ── Accueil : aperçu des cartes garanti + indice de défilement ── */
-@media(min-width:701px){
-.stage{min-height:28rem;height:100vh;height:100svh;padding:clamp(4.5rem,11vh,7rem) 1.5rem clamp(4.5rem,9vh,5.5rem)}
-.hero h1{font-size:clamp(2.2rem,min(7.5vw,9vh),5.6rem);margin-bottom:clamp(.5rem,2vh,1rem)}
-.hero .sub{margin-bottom:clamp(1.1rem,3.5vh,2rem)}
-}
-.scue{position:absolute;z-index:3;left:0;right:0;bottom:1.2rem;margin:0 auto;width:max-content;background:none;border:0;color:var(--brass);font:1rem "IM Fell English SC",serif;letter-spacing:.1em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.3rem .8rem;opacity:0;animation:cueIn 1s ease 2.6s forwards;transition:color .3s}
-.scue:hover{color:var(--paper)}
-.scue svg{width:1.5rem;height:1.5rem;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;animation:cueB 1.8s ease-in-out infinite}
-@keyframes cueIn{to{opacity:.9}}
-@keyframes cueB{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-.dw{padding-top:2.5rem}.deck{scroll-margin-top:6.5rem}
-@media(max-width:700px){.stage{padding-bottom:5rem}}
-@media(prefers-reduced-motion:reduce){.scue svg{animation:none!important}}
 </style>
 </head>
 <body>
@@ -440,7 +389,6 @@ button[data-send]{width:100%}
     <p class="sub rise d3">Un train lancé dans la nuit et la neige. Un crime à bord. Un seul coupable parmi les passagers : à vous de mener l'enquête.</p>
     <button class="btn rise d4" data-go="info">Embarquer</button>
   </div>
-  <button type="button" class="scue" aria-label="Voir la suite de la page"><span>Défiler</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
   </div>
   <div class="dw">
   <div class="deck">
@@ -1152,7 +1100,6 @@ bg.onclick=()=>drawer(!dr.classList.contains('on'));dv.onclick=()=>drawer(false)
 dr.addEventListener('click',e=>{if(e.target.dataset.go)drawer(false)});
 addEventListener('keydown',e=>{if(e.key==='Escape')drawer(false)});
 if(now==='partenaires')gate('partner');if(now==='apply')gate('team');if(now==='staff')loadStaff();if(now==='aide')prefill($('#g-aide'));
-document.addEventListener('click',e=>{if(e.target.closest('.scue')){const d=document.querySelector('#home .deck');if(d)d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'})}});
 </script>
 </body>
 </html>
