@@ -108,7 +108,6 @@ body.nolamp #lamp{opacity:0}
 #lg{width:100%;height:100%;object-fit:contain;display:block}
 
 /* Compte */
-.cd{font:2rem "IM Fell English SC",serif;color:var(--brass);margin:.4rem 0 1rem;letter-spacing:.05em}
 [hidden]{display:none!important}
 #au{border:1px solid var(--line);padding:.15rem .8rem;opacity:1;color:var(--brass)}
 #au:hover,#au.in{border-color:var(--brass)}
@@ -403,7 +402,7 @@ async function api(path,o={}){
  catch(e){const og=location.origin==='null'?'file://':location.origin;console.error('[api] échec réseau/CORS sur',path,'— origine à autoriser dans EXACT_ALLOWED_ORIGINS :',og,e);throw new Error('Connexion au serveur impossible depuis '+og+'. Réessaie ; si cela persiste, préviens le staff (adresse du site probablement absente de la liste CORS du Worker).')}
  let d=null;try{d=await r.json()}catch(e){}
  if(!r.ok){if(r.status===401&&t&&path!=='/auth/discord')drop();
-  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;x.path=path;x.ms=d&&d.retry_after_ms;throw x}
+  const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;x.path=path;throw x}
  return d}
 function drop(){P.set(TK,'');me=null;curSid=null;auth();if(now==='account')acct()}
 function auth(){const b=$('#au');
@@ -570,15 +569,7 @@ function formHTML(t){const d=FORMS[t];let r='<div class="f w" id="f-'+t+'">';
 const val=w=>{const t=w.dataset.t;if(t=='r'){const c=w.querySelector('input:checked');return c?c.value:''}
  if(t=='c')return w.querySelector('input').checked?'Oui':'';return w.querySelector('input,select,textarea').value.trim()};
 function prefill(g){if(!g||!me)return;g.querySelectorAll('[data-pre]').forEach(w=>{const e=w.querySelector('input');if(e&&!e.value)e.value=(w.dataset.pre=='mc'?me.minecraft_username:me.pseudo)||''})}
-$('#g-aide').innerHTML='<div class="pn" id="aideCd" hidden><h3>Demande envoyée</h3><p>Ton message a bien été transmis au staff, qui te répondra sur Discord. Tu pourras envoyer une nouvelle demande dans :</p><p class="cd" id="aideT"></p><p class="h">Une demande par tranche de 24 h. Pour une urgence, contacte directement un membre du staff sur Discord.</p></div>'+formHTML('aide');
-const AK='tlv_aide_last',AMS=864e5;let aideI=null;
-function aideCd(){
- const last=parseInt(P.get(AK)||'0',10),left=last?Math.max(0,last+AMS-Date.now()):0,n=$('#aideCd'),f=$('#f-aide');
- n.hidden=!left;f.hidden=!!left;
- if(left){const s=Math.floor(left/1e3);$('#aideT').textContent=String(Math.floor(s/3600)).padStart(2,'0')+' h '+String(Math.floor(s%3600/60)).padStart(2,'0')+' min '+String(s%60).padStart(2,'0')+' s';
-  if(!aideI)aideI=setInterval(aideCd,1000)}
- else{if(aideI){clearInterval(aideI);aideI=null}if(last)P.set(AK,'')}}
-aideCd();
+$('#g-aide').innerHTML=formHTML('aide');
 ['partner','team'].forEach(t=>{$('#g-'+t).innerHTML='<div class="pn" data-s="out"><p>Connexion Discord requise : elle garantit une seule candidature par compte.</p><button class="btn" data-login type="button">Connexion avec Discord</button></div><div class="pn" data-s="lock" hidden><h3>Candidature déjà envoyée</h3><p>Elle est définitive et a été transmise au staff. Il te répondra sur Discord.</p></div><div class="pn" data-s="err" hidden><p></p><button class="btn" data-retry="'+t+'" type="button">Réessayer</button></div><div data-s="form" hidden><p class="h">⚠ '+FORMS[t].w+'</p>'+formHTML(t)+'</div>'});
 let SUBP='/submissions/';
 async function subApi(t,o){try{return await api(SUBP+t,o)}catch(e){
@@ -599,8 +590,8 @@ async function send(t){const box=$('#f-'+t),st=box.querySelector('.st'),btn=box.
  btn.disabled=true;st.textContent='Envoi en cours…';
  try{if(t!='aide'&&!resv[t]){await subApi(t,{method:'POST',body:{}});resv[t]=1}
   await api('/forms/'+t,{method:'POST',body});delete resv[t];st.textContent='';btn.disabled=false;toast('Envoyé, merci !');
-  if(t=='aide'){box.querySelectorAll('input:not([type=checkbox]),textarea,select').forEach(e=>{if(!e.closest('[data-pre]'))e.value=''});P.set(AK,String(Date.now()));aideCd()}else gate(t)}
- catch(e){btn.disabled=false;if(t=='aide'&&e.status===429&&e.ms){P.set(AK,String(Date.now()-(AMS-e.ms)));aideCd();return}let m=e.message;
+  if(t=='aide')box.querySelectorAll('input:not([type=checkbox]),textarea,select').forEach(e=>{if(!e.closest('[data-pre]'))e.value=''});else gate(t)}
+ catch(e){btn.disabled=false;let m=e.message;
   if(/Webhook non configur/i.test(m))m="Ce formulaire n'est pas encore configuré côté serveur (webhook Discord manquant). Préviens le staff.";
   if(e.status===409&&t!='aide'){gate(t);m=''}
   if(e.status)m+=' [HTTP '+e.status+(e.code?' '+e.code:'')+' · '+e.path+']';
