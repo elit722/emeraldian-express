@@ -493,14 +493,6 @@ body.edit-mode .edbar.ed{display:flex!important}
 .edf input[type=file]{color:var(--fog);font-size:.95rem}
 .edrow{display:flex;gap:.5rem;align-items:flex-start}.edrow>:first-child{flex:0 1 32%}.edrow>:nth-child(2){flex:1}.edrow>span{flex:1;overflow-wrap:anywhere}
 @media(max-width:700px){.edrow{flex-wrap:wrap}.edrow>:first-child,.edrow>:nth-child(2){flex:1 1 100%}}
-/* v7 : paramètres (dans le profil), liens rapides, légal */
-#stg{left:50%;top:50%;bottom:auto;right:auto;transform:translate(-50%,-50%);z-index:70;max-height:calc(100dvh - 2rem);overflow:auto;border-color:var(--brass);box-shadow:0 18px 60px rgba(0,0,0,.7)}
-@media(max-width:700px){#stg{left:50%;right:auto;width:min(24rem,calc(100vw - 1.6rem))}}
-#stg .sgh{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 0 .7rem}#stg .sgh h4{margin:0}
-#stg .sg+.sg{margin-top:1rem}#stg .sgn{margin:.8rem 0 0}
-.qlw{display:flex;flex-direction:column;gap:.4rem}.qlw>.ql{flex:1;width:100%}
-.lgs .edb{margin:.4rem 0 .8rem}
-.steps li .edb{margin-left:.6rem;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -547,13 +539,26 @@ body.edit-mode .edbar.ed{display:flex!important}
 <section id="info" class="page"><div class="wrap">
   <h2>Informations</h2><div class="rule"></div>
   <div class="tabs" role="tablist"><button class="on" data-tab="i1">Infos générales</button><button data-tab="i2">Rôles InGame</button><button data-tab="i3">Candidatures</button><button data-tab="i4">Liens rapides</button></div>
-  <div class="tp on" id="i1"><p class="lead" id="i1lead"></p><div class="ed edbar"><button type="button" data-ed="info" data-k="info">✎ Modifier les informations</button><button type="button" data-ed="infotxt" data-k="infotxt" data-w="l1">✎ Modifier l’introduction</button></div><div id="infB"></div><div class="row" style="justify-content:center"><button class="btn" data-go="reglement">Aller au Règlement</button><button class="btn" data-go="faq">Aller aux Questions</button></div></div>
-  <div class="tp" id="i2"><p class="lead" id="i2lead"></p><div class="ed edbar"><button type="button" data-ed="infotxt" data-k="infotxt" data-w="l2">✎ Modifier l’introduction</button><button type="button" data-ed="add" data-k="roles">+ Ajouter un rôle</button></div><div class="grid" id="roleB"></div></div>
-  <div class="tp" id="i3"><p class="lead" id="i3lead"></p><div class="ed edbar"><button type="button" data-ed="infotxt" data-k="infotxt" data-w="l3">✎ Modifier les textes</button><button type="button" data-ed="add" data-k="steps">+ Ajouter une étape</button></div>
-    <ol class="steps" id="stepB"></ol>
-    <p class="h" id="i3note"></p>
+  <div class="tp on" id="i1"><p class="lead">Toutes les informations essentielles de l'événement sont réunies ici : fonctionnement du serveur, paramètres techniques et éléments clés pour préparer ton voyage.</p><div class="ed edbar"><button type="button" data-ed="info" data-k="info">✎ Modifier les informations</button></div><div id="infB"></div><div class="row" style="justify-content:center"><button class="btn" data-go="reglement">Aller au Règlement</button><button class="btn" data-go="faq">Aller aux Questions</button></div></div>
+  <div class="tp" id="i2"><p class="lead">Les rôles sont attribués au hasard et en secret à chaque manche : il faut adapter son RP en cours de route.</p><div class="grid">
+    <div class="card"><span class="tag">Voyageur</span><h3>Les passagers</h3><p>Montez à bord, explorez les wagons et gardez l'œil ouvert : observez, interrogez, déduisez.</p></div>
+    <div class="card"><span class="tag">Enquête</span><h3>Les détectives</h3><p>Ils mènent l'enquête et protègent les voyageurs.</p></div>
+    <div class="card"><span class="tag">Ombre</span><h3>Le coupable</h3><p>Il frappe dans l'ombre. Il doit rester discret jusqu'au bout.</p></div></div></div>
+  <div class="tp" id="i3"><p class="lead">Envie de monter à bord ? Voici comment candidater.</p>
+    <ol class="steps"><li><b>Connecte-toi avec Discord</b> depuis le bouton en haut de page.</li><li><b>Remplis le formulaire</b> : ton profil, ton personnage roleplay et tes motivations. Le rôle est attribué au hasard.</li><li><b>Attends la réponse du staff</b>, envoyée sur Discord.</li><li><b>Si ta candidature est validée</b>, tu pourras rejoindre le serveur. Tape alors <b>/link</b> en jeu, puis saisis le code dans la page Compte pour lier ton compte Minecraft.</li></ol>
+    <p class="h">Une seule candidature par compte, définitive une fois envoyée. Modalités de sélection : à annoncer. Créateur, studio ou communauté ? Passe par la page Partenaires.</p>
     <div class="row"><button class="btn" data-go="apply">Candidater</button><button class="btn" data-go="account">Mon compte</button></div></div>
-  <div class="tp" id="i4"><div class="ed edbar"><button type="button" data-ed="add" data-k="links">+ Ajouter un lien rapide</button></div><div class="grid" id="linkB"></div></div>
+  <div class="tp" id="i4"><div class="grid">
+    <button class="card ql" data-go="reglement"><h3>Règlement</h3><p>Les règles de l'événement.</p></button>
+    <button class="card ql" data-go="faq"><h3>Questions</h3><p>Les réponses du staff.</p></button>
+    <button class="card ql" data-go="lore"><h3>Lore</h3><p>L'histoire du voyage.</p></button>
+    <button class="card ql" data-go="apply"><h3>Candidater</h3><p>Ton profil et ton personnage RP.</p></button>
+    <button class="card ql" data-go="staff"><h3>Staff</h3><p>L'équipe derrière l'événement.</p></button>
+    <button class="card ql" data-go="partenaires"><h3>Partenaires</h3><p>Nos alliés, et comment le devenir.</p></button>
+    <button class="card ql" data-go="ajouts"><h3>Nos ajouts</h3><p>Ce que nous avons créé.</p></button>
+    <button class="card ql" data-go="trailer"><h3>Trailer</h3><p>Le film de l'événement.</p></button>
+    <button class="card ql" data-go="aide"><h3>Aide</h3><p>Contacter le staff.</p></button>
+    <button class="card ql" data-go="cgu"><h3>CGU &amp; légal</h3><p>Conditions, confidentialité, mentions.</p></button></div></div>
 </div></section>
 
 <section id="shots" class="page"><div class="wrap">
@@ -563,8 +568,26 @@ body.edit-mode .edbar.ed{display:flex!important}
 
 <section id="credits" class="page"><div class="wrap">
   <h2>Crédits</h2><div class="rule"></div>
-  <div class="ed edbar"><button type="button" data-ed="add" data-k="credits">+ Ajouter un crédit</button></div>
-  <div id="credB"></div>
+  <div class="credit"><h3>The Last Voyage of the Harpy Express</h3>
+    <p>L'expérience de jeu qui a inspiré cet événement, et sur laquelle il s'appuie.</p>
+    <p><a href="https://modrinth.com/modpack/harpy-express" target="_blank" rel="noopener">Modpack Harpy Express sur Modrinth</a></p></div>
+  <div class="credit"><h3>Wathe, par doctor4t</h3>
+    <p>Le mod à l'origine du jeu, de ses rôles et de son ambiance.</p>
+    <p><a href="https://github.com/doctor4t/Wathe" target="_blank" rel="noopener">github.com/doctor4t/Wathe</a></p></div>
+  <div class="credit"><h3>Dies irae, Requiem (Mozart Recomposed)</h3>
+    <p>Musique du site, par Guillaume Ferran.</p></div>
+  <div class="credit"><h3>The Last Voyage of the Emeraldian Express</h3>
+    <p>Événement, constructions et site web par l'équipe organisatrice.</p>
+    <p>Plus précisément, le mode de jeu et une partie de la map ont été créés par <b>Doctor4t</b>, mais le lore est notre création : nous avons entièrement customisé, adapté et agrandi la map, développé de nouvelles features (comme les cachettes, entre autres), personnalisé le mode de jeu et inventé un univers à partir de la base conceptualisée par Doctor4t.</p>
+    <p>Merci à <b>Nking</b>, qui nous a aidés à conceptualiser ces ajouts.</p></div>
+  <div class="credit"><h3>L'équipe derrière l'événement</h3>
+    <p><b>Elit722</b> : direction du projet et site web.</p>
+    <p><b>Nking</b> : développement.</p>
+    <p><b>Paco</b> : musique de l'événement.</p>
+    <p><b>Clara</b> et <b>Yoko</b> : graphisme.</p></div>
+  <div class="credit"><h3>Remerciements</h3>
+    <p><b>PierreShow</b> : conseils sur la gestion d'un event RP.</p>
+    <p><b>Claude AI</b> : assistance à la résolution technique de nos difficultés.</p></div>
 </div></section>
 
 <section id="trailer" class="page"><div class="wrap wide"><h2>Trailers</h2><div class="rule"></div>
@@ -613,7 +636,6 @@ body.edit-mode .edbar.ed{display:flex!important}
           <label for="fe">E-mail (facultatif)</label><input id="fe" type="email">
           <button class="btn" type="submit">Enregistrer</button>
         </form>
-        <div class="row"><button class="btn" id="bs" type="button" aria-expanded="false" aria-controls="stg">&#9881; Paramètres</button></div>
       </div>
     </div>
     <div class="cols acc">
@@ -649,8 +671,8 @@ body.edit-mode .edbar.ed{display:flex!important}
   </div>
 </div></section>
 </main>
-<div id="ctl"><button id="bm" aria-pressed="true">&#9835; Musique</button><button id="bt" aria-pressed="true">&#9728; Lanterne</button></div>
-<div id="stg" role="dialog" aria-label="Paramètres" hidden><div class="sgh"><h4>Paramètres</h4><button type="button" class="mini" id="sgX" aria-label="Fermer les paramètres">✕</button></div><label class="sg"><span>Volume de la musique de fond</span><input type="range" class="vl" id="sgV" min="0" max="100" value="100" aria-label="Volume de la musique de fond"><output id="sgO">100 %</output></label><label class="sg"><span>Volume des écoutes (lore et musiques)</span><input type="range" class="vl" id="sgL" min="0" max="100" value="100" aria-label="Volume des écoutes du lore et des musiques"><output id="sgLO">100 %</output></label><p class="h sgn">Réglage relié aux volumes individuels du lore vocal et des musiques : le modifier ici met à jour les deux, et inversement.</p></div>
+<div id="ctl"><button id="bm" aria-pressed="true">&#9835; Musique</button><button id="bt" aria-pressed="true">&#9728; Lanterne</button><button id="bs" type="button" aria-expanded="false" aria-controls="stg">&#9881; Paramètres</button></div>
+<div id="stg" role="dialog" aria-label="Paramètres" hidden><h4>Paramètres</h4><label class="sg"><span>Volume de la musique de fond</span><input type="range" class="vl" id="sgV" min="0" max="100" value="100" aria-label="Volume de la musique de fond"><output id="sgO">100 %</output></label></div>
 <footer>The Last Voyage of the Emeraldian Express &middot; Événement non officiel, non affilié à Mojang ni à Microsoft.<br><button class="lk" data-go="cgu" data-leg="l-cgu">CGU</button> &middot; <button class="lk" data-go="cgu" data-leg="l-priv">Confidentialité</button> &middot; <button class="lk" data-go="cgu" data-leg="l-ment">Mentions légales</button></footer>
 <div id="lb"><button class="nv" id="pv" aria-label="Précédent">&#8249;</button><img alt=""><button class="nv" id="nx" aria-label="Suivant">&#8250;</button></div>
 
@@ -704,12 +726,8 @@ function releaseForeground(owner){if(foreground&&foreground.owner===owner){foreg
 const audioFades=new WeakMap();function cancelAudioFade(a){const id=audioFades.get(a);if(id!==undefined)cancelAnimationFrame(id);audioFades.delete(a)}function fadeAudio(a,to,duration=260,done){cancelAudioFade(a);const from=a.volume,start=performance.now(),ms=still?0:duration;function step(now){const p=ms?Math.min(1,(now-start)/ms):1;a.volume=from+(to-from)*p;if(p<1)audioFades.set(a,requestAnimationFrame(step));else{audioFades.delete(a);if(done)done()}}audioFades.set(a,requestAnimationFrame(step))}
 /* contrôles partagés : position + volume d'un élément audio */
 function fmtT(s){if(!isFinite(s))return'–:––';s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
-/* volumes d'écoute reliés : lore vocal (lvol) + musiques (mvol) */
-let CTLS=[];
-const lvlOf=key=>{const v=parseFloat(P.get(key));return v>=0&&v<=1?v:1};
-function setListenVol(v){v=Math.max(0,Math.min(1,v));['lvol','mvol'].forEach(k=>P.set(k,v));CTLS=CTLS.filter(c=>c.el.isConnected);CTLS.forEach(c=>c.set(v))}
 function audCtl(audio,key,name){
- let lv=lvlOf(key),seeking=false;
+ let lv=parseFloat(P.get(key));if(!(lv>=0&&lv<=1))lv=1;let seeking=false;
  const el=document.createElement('div');el.className='ctr';
  el.innerHTML='<div class="ctk"><input type="range" class="sk" min="0" max="1000" value="0" step="1" disabled aria-label="Position dans '+name+'"><span class="tm">0:00 / –:––</span></div><label class="ctv"><span>Volume</span><input type="range" class="vl" min="0" max="100" value="'+Math.round(lv*100)+'" aria-label="Volume : '+name+'"><output>'+Math.round(lv*100)+' %</output></label>';
  const sk=el.querySelector('.sk'),tm=el.querySelector('.tm'),vl=el.querySelector('.vl'),ov=el.querySelector('output');
@@ -718,25 +736,18 @@ function audCtl(audio,key,name){
  ['pointerup','pointercancel','blur'].forEach(ev=>sk.addEventListener(ev,()=>{seeking=false;draw()}));
  sk.addEventListener('input',()=>{const d=audio.duration;if(!isFinite(d)||!d)return;audio.currentTime=sk.value/1000*d;tm.textContent=fmtT(audio.currentTime)+' / '+fmtT(d)});
  ['timeupdate','loadedmetadata','durationchange','seeked','emptied'].forEach(ev=>audio.addEventListener(ev,draw));
- const set=v=>{lv=v;const n=Math.round(v*100);vl.value=n;ov.textContent=n+' %';if(!audio.paused&&!audio.ended){cancelAudioFade(audio);audio.volume=lv}};
- const me={el,key,set};CTLS.push(me);
- vl.addEventListener('input',()=>{const v=vl.value/100;P.set(key,v);CTLS=CTLS.filter(c=>c.el.isConnected);CTLS.forEach(c=>{if(c.key===key)c.set(v)});document.dispatchEvent(new CustomEvent('tlv:listenvol'))});
- return{el,level:()=>lv,set}}
+ vl.addEventListener('input',()=>{lv=vl.value/100;ov.textContent=vl.value+' %';P.set(key,lv);if(!audio.paused&&!audio.ended){cancelAudioFade(audio);audio.volume=lv}});
+ return{el,level:()=>lv}}
 addEventListener('pointerdown',()=>{if(!muted)begin()},{once:true});
 bm.addEventListener('click',()=>{muted=!muted;P.set('mute',muted?1:0);mark();begin();vol()});
 /* paramètres : volume de la musique de fond */
-(function(){const bs=$('#bs'),sp=$('#stg'),sv=$('#sgV'),so=$('#sgO'),sl=$('#sgL'),slo=$('#sgLO');
+(function(){const bs=$('#bs'),sp=$('#stg'),sv=$('#sgV'),so=$('#sgO');
  sv.value=Math.round(bgv*100);so.textContent=sv.value+' %';
  sv.addEventListener('input',()=>{bgv=sv.value/100;so.textContent=sv.value+' %';P.set('bgvol',bgv);vol()});
- const drawL=()=>{const n=Math.round((lvlOf('lvol')+lvlOf('mvol'))/2*100);sl.value=n;slo.textContent=n+' %'};drawL();
- sl.addEventListener('input',()=>{slo.textContent=sl.value+' %';setListenVol(sl.value/100)});
- document.addEventListener('tlv:listenvol',drawL);
  const close=()=>{sp.hidden=true;bs.setAttribute('aria-expanded','false')};
  bs.addEventListener('click',()=>{const o=sp.hidden;sp.hidden=!o;bs.setAttribute('aria-expanded',String(o))});
  document.addEventListener('click',e=>{if(!sp.hidden&&!sp.contains(e.target)&&!bs.contains(e.target))close()});
- addEventListener('keydown',e=>{if(e.key==='Escape'&&!sp.hidden){close();bs.focus()}});
- $('#sgX').addEventListener('click',()=>{close();bs.focus()});
- new MutationObserver(()=>{if(!$('#account').classList.contains('on'))close()}).observe($('#account'),{attributes:true,attributeFilter:['class']})})();
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&!sp.hidden){close();bs.focus()}})})();
 /* diaporama d'accueil */
 const b1=$('.bg'),b2=$('.bg2');let bi=3;
 function slide(){if(now!=='home'||!figs.length)return;bi=(bi+1)%figs.length;const u=figs[bi].querySelector('img').src;b2.src=u;b2.style.display='block';
@@ -1036,26 +1047,6 @@ const pimg=p=>safeU(p.u)||IMG[p.i]||BLANK;
 /* barre d'édition (invisible hors mode édition) */
 const tb=(k,i,j)=>'<span class="ed edb" data-k="'+k+'" data-i="'+i+'"'+(j!=null?' data-j="'+j+'"':'')+'>'+(k!=='shots'?'<button type="button" data-ed="edit" title="Modifier">✎</button>':'')+'<button type="button" data-ed="up" title="Monter">↑</button><button type="button" data-ed="dn" title="Descendre">↓</button><button type="button" data-ed="del" title="Supprimer">✕</button>'+(k==='rules'&&j==null?'<button type="button" data-ed="addart" title="Ajouter un article">+ Article</button>':'')+'</span>';
 const card=(n,r,d,ks,b)=>'<div class="card" data-keys="'+A(JSON.stringify(ks))+'"><div class="av"><span>'+A(n[0])+'</span></div><h3>'+A(n)+'</h3><p><i>'+A(r)+'</i></p><p>'+A(d)+'</p><span class="tag">'+A(b)+'</span></div>';
-/* ── v7 : sous-sections d'Informations et crédits : données éditables ── */
-const mk=s=>A(s).replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-const TXT={l1:"Toutes les informations essentielles de l'événement sont réunies ici : fonctionnement du serveur, paramètres techniques et éléments clés pour préparer ton voyage.",l2:"Les rôles sont attribués au hasard et en secret à chaque manche : il faut adapter son RP en cours de route.",l3:"Envie de monter à bord ? Voici comment candidater.",n3:"Une seule candidature par compte, définitive une fois envoyée. Modalités de sélection : à annoncer. Créateur, studio ou communauté ? Passe par la page Partenaires."};
-const ROLES=[["Voyageur","Les passagers","Montez à bord, explorez les wagons et gardez l'œil ouvert : observez, interrogez, déduisez."],["Enquête","Les détectives","Ils mènent l'enquête et protègent les voyageurs."],["Ombre","Le coupable","Il frappe dans l'ombre. Il doit rester discret jusqu'au bout."]];
-const STEPS=["**Connecte-toi avec Discord** depuis le bouton en haut de page.","**Remplis le formulaire** : ton profil, ton personnage roleplay et tes motivations. Le rôle est attribué au hasard.","**Attends la réponse du staff**, envoyée sur Discord.","**Si ta candidature est validée**, tu pourras rejoindre le serveur. Tape alors **/link** en jeu, puis saisis le code dans la page Compte pour lier ton compte Minecraft."];
-const LINKS=[["reglement","Règlement","Les règles de l'événement."],["faq","Questions","Les réponses du staff."],["lore","Lore","L'histoire du voyage."],["apply","Candidater","Ton profil et ton personnage RP."],["staff","Staff","L'équipe derrière l'événement."],["partenaires","Partenaires","Nos alliés, et comment le devenir."],["ajouts","Nos ajouts","Ce que nous avons créé."],["trailer","Trailer","Le film de l'événement."],["aide","Aide","Contacter le staff."],["cgu","CGU & légal","Conditions, confidentialité, mentions."]];
-const CREDITS=[
-{t:"The Last Voyage of the Harpy Express",p:["L'expérience de jeu qui a inspiré cet événement, et sur laquelle il s'appuie.","[Modpack Harpy Express sur Modrinth](https://modrinth.com/modpack/harpy-express)"]},
-{t:"Wathe, par doctor4t",p:["Le mod à l'origine du jeu, de ses rôles et de son ambiance.","[github.com/doctor4t/Wathe](https://github.com/doctor4t/Wathe)"]},
-{t:"Dies irae, Requiem (Mozart Recomposed)",p:["Musique du site, par Guillaume Ferran."]},
-{t:"The Last Voyage of the Emeraldian Express",p:["Événement, constructions et site web par l'équipe organisatrice.","Plus précisément, le mode de jeu et une partie de la map ont été créés par **Doctor4t**, mais le lore est notre création : nous avons entièrement customisé, adapté et agrandi la map, développé de nouvelles features (comme les cachettes, entre autres), personnalisé le mode de jeu et inventé un univers à partir de la base conceptualisée par Doctor4t.","Merci à **Nking**, qui nous a aidés à conceptualiser ces ajouts."]},
-{t:"L'équipe derrière l'événement",p:["**Elit722** : direction du projet et site web.","**Nking** : développement.","**Paco** : musique de l'événement.","**Clara** et **Yoko** : graphisme."]},
-{t:"Remerciements",p:["**PierreShow** : conseils sur la gestion d'un event RP.","**Claude AI** : assistance à la résolution technique de nos difficultés."]}];
-function rTxt(){$('#i1lead').textContent=TXT.l1||'';$('#i2lead').textContent=TXT.l2||'';$('#i3lead').textContent=TXT.l3||'';$('#i3note').textContent=TXT.n3||''}
-function rRoles(){$('#roleB').innerHTML=ROLES.map((r,i)=>'<div class="card">'+(r[0]?'<span class="tag">'+A(r[0])+'</span>':'')+'<h3>'+A(r[1])+'</h3><p>'+A(r[2])+'</p>'+tb('roles',i)+'</div>').join('')}
-function rSteps(){$('#stepB').innerHTML=STEPS.map((x,i)=>'<li>'+mk(x)+tb('steps',i)+'</li>').join('')}
-function rLinks(){$('#linkB').innerHTML=LINKS.map((l,i)=>{const off=(siteOff()||flagOff(l[0]))&&!edt;return off?'':'<div class="qlw"><button type="button" class="card ql" data-to="'+A(l[0])+'"><h3>'+A(l[1])+'</h3><p>'+A(l[2])+'</p></button>'+tb('links',i)+'</div>'}).join('')}
-function rCred(){$('#credB').innerHTML=CREDITS.map((c,i)=>'<div class="credit"><h3>'+A(c.t)+'</h3>'+c.p.map(p=>'<p>'+mk(p)+'</p>').join('')+tb('credits',i)+'</div>').join('')}
-document.addEventListener('relink:flags',rLinks);document.addEventListener('relink:editmode',rLinks);
-rTxt();rRoles();rSteps();rLinks();rCred();
 function rStf(){$('#stB').innerHTML='<h3 class="sec">Équipe de création</h3><div class="grid">'+STAFF.map((s,si)=>card(...s).replace(/<\/div>$/,tb('staff',si)+'</div>')).join('')+'</div>';}rStf();
 /* avatars Discord via les comptes RELINK (/search) */
 const nz=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f_]/g,'').toLowerCase(),bs=s=>nz(s).replace(/\d+$/,'');
@@ -1078,15 +1069,15 @@ function audPlayer(box,url,name){
  const w=document.createElement('div');w.className='afa';
  w.innerHTML='<button type="button" class="btn amb" aria-pressed="false"><span class="amI" aria-hidden="true">▶</span> <span class="amT"></span></button>';
  const b=w.firstChild,I=b.querySelector('.amI'),T=b.querySelector('.amT'),own='add:'+Math.random().toString(36).slice(2);
- const au=new Audio(url);au.preload='none';au.volume=0;const mc=audCtl(au,'mvol',"l'audio "+(name||''));w.append(mc.el);mc.el.hidden=true;box.append(w);
- let token=0,wanted=false,started=false;
- const ui=on=>{mc.el.hidden=!started;b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':(au.currentTime>1&&!au.ended?'Reprendre':'Écouter'+(name?' · '+name:''))};
- const stop=()=>{token++;wanted=false;started=false;cancelAudioFade(au);au.pause();au.currentTime=0;au.volume=0;releaseForeground(own);ui(false)};
- const ended=()=>{token++;wanted=false;started=false;cancelAudioFade(au);au.volume=0;releaseForeground(own);ui(false)};
+ const au=new Audio(url);au.preload='none';au.volume=0;const mc=audCtl(au,'mvol',"l'audio "+(name||''));w.append(mc.el);box.append(w);
+ let token=0,wanted=false;
+ const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':(au.currentTime>1&&!au.ended?'Reprendre':'Écouter'+(name?' · '+name:''))};
+ const stop=()=>{token++;wanted=false;cancelAudioFade(au);au.pause();au.currentTime=0;au.volume=0;releaseForeground(own);ui(false)};
+ const ended=()=>{token++;wanted=false;cancelAudioFade(au);au.volume=0;releaseForeground(own);ui(false)};
  au.addEventListener('ended',ended);
  au.addEventListener('error',()=>{if(!wanted)return;stop();T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200)});
  b.addEventListener('click',()=>{
-  if(au.paused){wanted=true;started=true;mc.el.hidden=false;const my=++token;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground(own,stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,mc.level())}}).catch(()=>{if(my===token)stop()})}
+  if(au.paused){wanted=true;const my=++token;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground(own,stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,mc.level())}}).catch(()=>{if(my===token)stop()})}
   else{token++;wanted=false;cancelAudioFade(au);au.pause();au.volume=0;releaseForeground(own);ui(false)}});
  ui(false);
  const o={stop:()=>{if(!au.paused)stop()},prep:()=>{if(au.preload==='none'){au.preload='metadata';au.load()}},dead:()=>{stop();au.removeAttribute('src');au.load()}};
@@ -1116,11 +1107,11 @@ const fxl=x=>A(x).replace(/\{\{([\s\S]+?)\}\}/g,'<em class="ex">$1</em>');
 let lawSt='v';
 function lawFilter(){const q=$('#lawQ').value.trim().toLowerCase();let tot=0;
  $$('.art').forEach(a=>{const m=!q||a.textContent.toLowerCase().includes(q)||(a.dataset.alt||'').includes(q);a.classList.toggle('hide',!m);if(m)tot++});
- $$('.ch').forEach(c=>{const v=c.querySelectorAll('.art:not(.hide)').length;c.classList.toggle('none',!!q&&!v);if(q&&v)c.classList.add('open')});$('#lawN').hidden=tot>0||!q}
+ $$('.ch').forEach(c=>{const v=c.querySelectorAll('.art:not(.hide)').length;c.classList.toggle('none',!v);if(q&&v)c.classList.add('open')});$('#lawN').hidden=tot>0}
 function renderLaw(){const V=lawSt=='v',open=$$('#lawB .ch').map(c=>c.classList.contains('open'));let n=0;
- $('#lawB').innerHTML=RULES.map((c,i)=>'<div class="ch'+((open.length?(i<open.length?open[i]:true):!i)?' open':'')+'"><button type="button"><span>Chapitre '+(V?(ORD[i]||(i+1)+'e'):i+1)+' — '+A(V?c.v:c.t)+'</span><span>▼</span></button><div>'+tb('rules',i)+c.a.map((a,j)=>{n++;
+ $('#lawB').innerHTML=RULES.map((c,i)=>'<div class="ch'+((open.length?open[i]:!i)?' open':'')+'"><button type="button"><span>Chapitre '+(V?(ORD[i]||(i+1)+'e'):i+1)+' — '+A(V?c.v:c.t)+'</span><span>▼</span></button><div>'+tb('rules',i)+c.a.map((a,j)=>{n++;
   const alt=(V?a[0]+' '+a[2].join(' '):a[1]+' '+a[3].join(' ')).replace(/\{\{|\}\}/g,'').toLowerCase();
-  return '<div class="art" data-alt="'+A(alt)+'"><b>Article '+(V?(n==1?'premier':rmn(n)):n)+' — '+A(V?a[1]:a[0])+'</b>'+(V?a[3]:a[2]).map((x,k)=>'<p><i>'+(V?'§ ':'Alinéa ')+(k+1)+'.</i> '+fxl(x)+'</p>').join('')+tb('rules',i,j)+'</div>'}).join('')+(c.a.length?'':'<p class="todo">Aucun article pour le moment.</p>')+'</div></div>').join('');
+  return '<div class="art" data-alt="'+A(alt)+'"><b>Article '+(V?(n==1?'premier':rmn(n)):n)+' — '+A(V?a[1]:a[0])+'</b>'+(V?a[3]:a[2]).map((x,k)=>'<p><i>'+(V?'§ ':'Alinéa ')+(k+1)+'.</i> '+fxl(x)+'</p>').join('')+tb('rules',i,j)+'</div>'}).join('')+'</div></div>').join('');
  $('#lawLead').innerHTML=V?LEAD_V:LEAD_N;
  $$('#lawTg button').forEach(b=>b.classList.toggle('on',b.dataset.st==lawSt));lawFilter()}
 $('#lawB').addEventListener('click',e=>{const b=e.target.closest('.ch>button');if(b)b.parentElement.classList.toggle('open')});
@@ -1198,9 +1189,9 @@ const twSrc=ch=>'https://player.twitch.tv/?channel='+encodeURIComponent(ch)+twPa
  const bP=$('#lrP'),bS=$('#lrS'),ic=bP.querySelector('.lric'),tx=bP.querySelector('.lrtx');
  const audio=new Audio('Assets/Son/lorevocal.mp3');audio.preload='none';audio.volume=0;
  let state='idle',token=0;
- const lc=audCtl(audio,'lvol','le fichier vocal du lore');lc.el.hidden=true;box.append(lc.el);
+ const lc=audCtl(audio,'lvol','le fichier vocal du lore');box.append(lc.el);
  function ui(){const on=state==='play',paused=state==='pause';bP.setAttribute('aria-pressed',on);ic.textContent=on?'❚❚':'▶';
-  tx.textContent=on?'Pause':paused?'Reprendre':'Écouter le lore';bS.hidden=state==='idle';lc.el.hidden=state==='idle'}
+  tx.textContent=on?'Pause':paused?'Reprendre':'Écouter le lore';bS.hidden=state==='idle'}
  function stop(){token++;state='idle';cancelAudioFade(audio);audio.pause();audio.currentTime=0;audio.volume=0;releaseForeground('lore');ui()}
  function ended(){token++;state='idle';cancelAudioFade(audio);audio.volume=0;releaseForeground('lore');ui()}
  audio.addEventListener('ended',ended);
@@ -1332,27 +1323,7 @@ const LEGAL={"l-cgu":[["",`<p class="lgu">Dernière mise à jour : 5 octobre 202
 ["Hébergement","Site : [hébergeur à compléter]. API et comptes : Cloudflare, Inc. (Workers et D1). Serveur de jeu : LordHosting."],
 ["Crédits et licences","Mod Wathe (doctor4t), modpack Harpy Express, musique « Dies irae, Requiem (Mozart Recomposed) » de Guillaume Ferran : voir la page Crédits."],
 ["Marques","Minecraft est une marque de Mojang AB / Microsoft. Événement non officiel, non affilié à Mojang ni à Microsoft."]]};
-/* Textes légaux : tout est en HTML simple (nettoyé à l'affichage), modifiable en mode édition */
-for(const k in LEGAL)LEGAL[k]=LEGAL[k].map(x=>x[2]?[x[0],x[1],1]:[x[0],'<p>'+A(x[1])+'</p>',1]);
-const OKT=new Set(['P','BR','STRONG','B','EM','I','U','A','UL','OL','LI','TABLE','THEAD','TBODY','TR','TH','TD','CODE','DIV','SPAN','H4','BLOCKQUOTE']);
-function safeHTML(src){const t=document.createElement('template');t.innerHTML=String(src||'');
- (function clean(n){[...n.childNodes].forEach(c=>{
-  if(c.nodeType===3)return;
-  if(c.nodeType!==1){c.remove();return}
-  if(/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|LINK|META|FORM|INPUT|BUTTON|TEXTAREA|SELECT|SVG|MATH)$/.test(c.tagName)){c.remove();return}
-  clean(c);
-  if(!OKT.has(c.tagName)){c.replaceWith(...c.childNodes);return}
-  [...c.attributes].forEach(a=>{const nm=a.name.toLowerCase();
-   if(c.tagName==='A'&&nm==='href'&&/^(https?:\/\/|mailto:)/i.test(a.value.trim()))return;
-   if(nm==='class'&&/^(tw|lgu)$/.test(a.value))return;
-   c.removeAttribute(a.name)});
-  if(c.tagName==='A'){if(c.getAttribute('href')){c.target='_blank';c.rel='noopener'}else c.replaceWith(...c.childNodes)}
- })})(t.content);
- return t.innerHTML}
-const lgBar=(t,i)=>'<span class="ed edb" data-k="legal" data-t="'+t+'" data-i="'+i+'"><button type="button" data-ed="edit" title="Modifier">✎</button><button type="button" data-ed="up" title="Monter">↑</button><button type="button" data-ed="dn" title="Descendre">↓</button><button type="button" data-ed="del" title="Supprimer">✕</button></span>';
-function renderLegal(){for(const t in LEGAL){const el=$('#'+t);if(!el)continue;
- el.innerHTML='<div class="ed edbar"><button type="button" data-ed="add" data-k="legal" data-t="'+t+'">+ Ajouter une section</button></div>'+LEGAL[t].map((x,i)=>'<div class="lgs">'+(x[0]?'<h3>'+A(x[0])+'</h3>':'')+safeHTML(x[1])+lgBar(t,i)+'</div>').join('')}}
-renderLegal();
+for(const k in LEGAL)$('#'+k).innerHTML=LEGAL[k].map(x=>(x[0]?'<h3>'+A(x[0])+'</h3>':'')+(x[2]?x[1]:'<p>'+A(x[1])+'</p>')).join('');
 /* menu burger */
 const dr=$('#dr'),dv=$('#dv'),bg=$('#bg');
 function drawer(o){dr.classList.toggle('on',o);dv.classList.toggle('on',o);bg.setAttribute('aria-expanded',o)}
@@ -1389,18 +1360,16 @@ function shrink(file,max,type){return new Promise((res,rej)=>{
 const dropFile=u=>{const m=String(u||'').startsWith(CONTENT_API+'/files/')&&u.slice(CONTENT_API.length).match(/^\/files\/([\w-]+)/);if(m)api2('/files/'+m[1],{method:'DELETE'}).catch(()=>{})};
 
 /* ── Données : défauts, surcharges et rendu ── */
-const ARR={shorts:SHORTS,info:INFOS,twitch:TWITCH,rules:RULES,faq:FAQ,adds:ADDS,partners:PARTNERS,staff:STAFF,roles:ROLES,steps:STEPS,links:LINKS,credits:CREDITS};
-const DEF={};for(const k in ARR)DEF[k]=clone(ARR[k]);DEF.trailer={lore:TRAILER_LORE,meca:TRAILER_MECA};DEF.infotxt=clone(TXT);DEF.legal=clone(LEGAL);
+const ARR={shorts:SHORTS,info:INFOS,twitch:TWITCH,rules:RULES,faq:FAQ,adds:ADDS,partners:PARTNERS,staff:STAFF};
+const DEF={};for(const k in ARR)DEF[k]=clone(ARR[k]);DEF.trailer={lore:TRAILER_LORE,meca:TRAILER_MECA};
 const DEFSRC=[...document.querySelectorAll('.gal figure img')].map(i=>i.src);DEF.shots=DEFSRC.map((_,i)=>i);
 let SHOTS=DEF.shots.slice(),OV={},REV=0;
 window.rShots=function(){const g=$('.gal');g.textContent='';
  SHOTS.forEach((e,i)=>{const s=typeof e==='number'?DEFSRC[e]:safeU(e);if(!s)return;const f=document.createElement('figure'),im=new Image();im.loading='lazy';im.alt='Screenshot '+(i+1);im.src=s;f.append(im);f.insertAdjacentHTML('beforeend',tb('shots',i));g.append(f)});
  bindFigs()};
-const RK={shots:()=>rShots(),trailer:()=>rTr(),shorts:()=>window.rShorts&&rShorts(),info:()=>rInfo(),twitch:()=>window.rLive&&rLive(),rules:()=>renderLaw(),faq:()=>rFaq(),adds:()=>rAdd(),partners:()=>rPar(),staff:()=>{rStf();if(now==='staff')loadStaff()},roles:()=>rRoles(),steps:()=>rSteps(),links:()=>rLinks(),credits:()=>rCred(),infotxt:()=>rTxt(),legal:()=>renderLegal()};
+const RK={shots:()=>rShots(),trailer:()=>rTr(),shorts:()=>window.rShorts&&rShorts(),info:()=>rInfo(),twitch:()=>window.rLive&&rLive(),rules:()=>renderLaw(),faq:()=>rFaq(),adds:()=>rAdd(),partners:()=>rPar(),staff:()=>{rStf();if(now==='staff')loadStaff()}};
 function applyContent(d){d=d||{};
  for(const k in ARR){const v=k in d?d[k]:DEF[k];if(Array.isArray(v))ARR[k].splice(0,ARR[k].length,...clone(v))}
- Object.keys(TXT).forEach(x=>delete TXT[x]);Object.assign(TXT,clone(DEF.infotxt),d.infotxt&&typeof d.infotxt==='object'&&!Array.isArray(d.infotxt)?d.infotxt:{});
- for(const lk in LEGAL){const v=d.legal&&Array.isArray(d.legal[lk])?d.legal[lk]:DEF.legal[lk];LEGAL[lk].splice(0,LEGAL[lk].length,...clone(v))}
  const t=d.trailer||DEF.trailer;TRAILER_LORE=t.lore||'';TRAILER_MECA=t.meca||'';
  SHOTS=Array.isArray(d.shots)?clone(d.shots):DEF.shots.slice();
  Object.values(RK).forEach(f=>{try{f()}catch(e){console.error('[contenu]',e)}})}
@@ -1409,7 +1378,7 @@ async function loadContent(){
  try{const r=await fetch(CONTENT_API+'/content',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(!d||typeof d.data!=='object')return;
   const changed=d.rev!==REV;REV=d.rev;OV=d.data;cache();if(changed)applyContent(OV)}catch(e){}}
 async function commit(k,junk){
- const val=k==='shots'?SHOTS:k==='trailer'?{lore:TRAILER_LORE,meca:TRAILER_MECA}:k==='infotxt'?TXT:k==='legal'?LEGAL:ARR[k];RK[k]();
+ const val=k==='shots'?SHOTS:k==='trailer'?{lore:TRAILER_LORE,meca:TRAILER_MECA}:ARR[k];RK[k]();
  try{const r=await api2('/content/'+k,{method:'PUT',body:val});OV[k]=clone(val);REV=r.rev;cache();toast('Modification enregistrée pour tous les visiteurs.');(junk||[]).forEach(dropFile)}
  catch(x){toast('Échec de l\u2019enregistrement : '+x.message+' — contenu restauré.');applyContent(OV)}}
 
@@ -1437,24 +1406,9 @@ function filesFld(bd,l,list){const cur=(list||[]).map(x=>({...x})),w=h('div','ed
  return async()=>{const out=cur.slice();for(const fl of f.files){const d=await upload(fl);out.push({u:d.url,n:d.name||fl.name,t:fl.type||d.type})}return out}}
 const lines=s=>s.split('\n').map(z=>z.trim()).filter(Boolean);
 const need=(...v)=>{if(v.some(x=>!x||(Array.isArray(x)&&!x.length)))throw new Error('Tous les champs obligatoires doivent être remplis.')};
-const PAGES=[['','Aucun'],['apply','Candidater'],['aide','Aide'],['info','Informations'],['reglement','Règlement'],['lore','Lore'],['ajouts','Nos ajouts'],['partenaires','Partenaires'],['staff','Staff'],['account','Compte'],['trailer','Trailers'],['live','Live'],['about','Qui sommes-nous ?'],['shots','Screenshots'],['credits','Crédits'],['faq','Questions'],['cgu','CGU & légal']];
+const PAGES=[['','Aucun'],['apply','Candidater'],['aide','Aide'],['info','Informations'],['reglement','Règlement'],['lore','Lore'],['ajouts','Nos ajouts'],['partenaires','Partenaires'],['staff','Staff'],['account','Compte'],['trailer','Trailers'],['live','Live'],['about','Qui sommes-nous ?'],['shots','Screenshots'],['credits','Crédits']];
 
 const EF={
- roles:x=>edOpen(x?'Modifier le rôle':'Nouveau rôle',bd=>{
-  const t=fld(bd,'Badge (facultatif)','text',x&&x[0],{ph:'Voyageur, Enquête, Ombre…'}),n=fld(bd,'Titre','text',x&&x[1]),d=fld(bd,'Description','area',x&&x[2],{rows:4});
-  return()=>{const N=n().trim();need(N);return[t().trim(),N,d().trim()]}}),
- steps:x=>edOpen(x?'Modifier l\u2019étape':'Nouvelle étape',bd=>{
-  const s=fld(bd,'Texte de l\u2019étape','area',x,{rows:5,h:'Gras : **texte** — Lien : [texte](https://…)'});
-  return()=>{const v=s().trim();need(v);return v}}),
- links:x=>edOpen(x?'Modifier le lien rapide':'Nouveau lien rapide',bd=>{
-  const p=fld(bd,'Page de destination','sel',x?x[0]:'reglement',{opts:PAGES.filter(a=>a[0])}),n=fld(bd,'Titre','text',x&&x[1]),d=fld(bd,'Description','text',x&&x[2]);
-  return()=>{const N=n().trim();need(N);return[p(),N,d().trim()]}}),
- credits:x=>edOpen(x?'Modifier le crédit':'Nouveau crédit',bd=>{
-  const t=fld(bd,'Titre','text',x&&x.t),p=fld(bd,'Paragraphes (un par ligne)','area',x&&x.p.join('\n'),{rows:9,h:'Gras : **texte** — Lien : [texte](https://…)'});
-  return()=>{const T=t().trim(),L2=lines(p());need(T,L2.length);return{t:T,p:L2}}}),
- legal:x=>edOpen(x?'Modifier la section':'Nouvelle section',bd=>{
-  const t=fld(bd,'Titre (facultatif)','text',x&&x[0]),c=fld(bd,'Contenu','area',x&&x[1],{rows:14,h:'Texte simple (un paragraphe par ligne) ou HTML de base : <p>, <strong>, <em>, <br>, <a href="https://…">, <ul><li>, <table>… Les scripts et attributs dangereux sont supprimés à l\u2019affichage.'});
-  return()=>{const T=t().trim();let H=c().trim();need(H);if(!/</.test(H))H=lines(H).map(l=>'<p>'+A(l)+'</p>').join('');return[T,H,1]}}),
  faq:x=>edOpen(x?'Modifier la question':'Nouvelle question',bd=>{
   const q=fld(bd,'Question','text',x&&x[0]),a=fld(bd,'Réponse du staff','area',x&&x[1],{rows:6,h:'Un lien : [texte](https://…) — un retour à la ligne crée un paragraphe.'}),p=fld(bd,'Bouton vers une page du site (facultatif)','sel',x&&x[2]||'',{opts:PAGES}),l=fld(bd,'Texte du bouton','text',x&&x[3]);
   return()=>{const Q=q().trim(),R=a().trim();need(Q,R);return p()?[Q,R,p(),l().trim()||'Voir']:[Q,R]}}),
@@ -1479,12 +1433,12 @@ const EF={
   return async()=>{const N=n().trim();need(N);return{n:N,c:c(),u:await u()}}}),
  rules:x=>edOpen(x?'Modifier le chapitre':'Nouveau chapitre',bd=>{
   const t=fld(bd,'Titre — français courant','text',x&&x.t),v=fld(bd,'Titre — français d\u2019époque','text',x&&x.v);
-  return()=>{const T=t().trim(),V=v().trim();need(T||V);return{t:T||V,v:V||T,a:x?x.a:[]}}}),
+  return()=>{need(t().trim(),v().trim());return{t:t().trim(),v:v().trim(),a:x?x.a:[]}}}),
  art:x=>edOpen(x?'Modifier l\u2019article':'Nouvel article',bd=>{
   const tn=fld(bd,'Titre — français courant','text',x&&x[0]),tv=fld(bd,'Titre — français d\u2019époque','text',x&&x[1]),
    pn=fld(bd,'Alinéas — français courant (un par ligne)','area',x&&x[2].join('\n'),{rows:6,h:'Entoure un exemple de {{doubles accolades}} pour l’afficher en italique.'}),
    pv=fld(bd,'Alinéas — français d\u2019époque (un par ligne)','area',x&&x[3].join('\n'),{rows:6,h:'Les deux versions sont reliées : elles s’affichent selon le style choisi par le visiteur.'});
-  return()=>{const N=tn().trim(),V=tv().trim(),A1=lines(pn()),A2=lines(pv());need(N||V,A1.length||A2.length);return[N||V,V||N,A1.length?A1:A2,A2.length?A2:A1]}})
+  return()=>{const a=[tn().trim(),tv().trim(),lines(pn()),lines(pv())];need(...a);return a}})
 };
 async function edInfo(){
  const v=await edOpen('Informations générales',bd=>{
@@ -1495,13 +1449,6 @@ async function edInfo(){
     const ad=h('button','mini','+ Ligne');ad.type='button';ad.onclick=()=>{s.i.push(['','',0]);draw()};w.append(ad)})};
   draw();return()=>secs.map(s=>({t:s.t,i:s.i.filter(r=>r[0].trim()&&String(r[1]).trim()).map(r=>{r[0]=r[0].trim();r[1]=String(r[1]).trim();return r})}))});
  if(!v)return;INFOS.splice(0,INFOS.length,...v);await commit('info')}
-async function edTxt(w){
- const v=await edOpen('Textes de la page',bd=>{const o=[];
-  if(w==='l1')o.push(['l1',fld(bd,'Texte d’introduction','area',TXT.l1,{rows:4})]);
-  if(w==='l2')o.push(['l2',fld(bd,'Texte d’introduction','area',TXT.l2,{rows:4})]);
-  if(w==='l3'){o.push(['l3',fld(bd,'Texte d’introduction','area',TXT.l3,{rows:3})]);o.push(['n3',fld(bd,'Note sous les étapes','area',TXT.n3,{rows:4})])}
-  return()=>{const r={};o.forEach(([k,g])=>{r[k]=g().trim()});return r}});
- if(!v)return;Object.assign(TXT,v);await commit('infotxt')}
 async function edTrailer(w){
  const cur=w==='lore'?TRAILER_LORE:TRAILER_MECA;
  const v=await edOpen(w==='lore'?'Lore\u2019s Trailer':'Mechanics and innovation\u2019s Trailer',bd=>{const g=fileFld(bd,'Lien YouTube ou vidéo (.mp4 / .webm)',cur,{accept:'video/mp4,video/webm',h:'Laisse vide pour afficher « Bientôt disponible ».'});return()=>g()});
@@ -1518,10 +1465,9 @@ const mv=(L,i,d)=>{const j=i+d;if(j<0||j>=L.length)return false;[L[i],L[j]]=[L[j
 
 async function ACT(a,k,i,j,b){
  if(a==='info')return edInfo();
- if(a==='infotxt')return edTxt(b.dataset.w);
  if(a==='trailer')return edTrailer(b.dataset.w);
  if(a==='add'&&k==='shots')return addShots();
- const art=k==='rules'&&j!=null,L=art?RULES[i].a:k==='rules'?RULES:k==='shots'?SHOTS:k==='legal'?LEGAL[b.closest('[data-k]').dataset.t]:ARR[k],ix=art?j:i;
+ const art=k==='rules'&&j!=null,L=art?RULES[i].a:k==='rules'?RULES:k==='shots'?SHOTS:ARR[k],ix=art?j:i;
  if(a==='up'||a==='dn'){if(mv(L,ix,a==='up'?-1:1))await commit(k);return}
  if(a==='del'){if(!confirm('Supprimer cet élément pour tous les visiteurs ?'))return;const [old]=L.splice(ix,1);await commit(k,junkOf(k,old));return}
  if(a==='addart'){const x=await EF.art(null);if(x){RULES[i].a.push(x);await commit('rules')}return}
