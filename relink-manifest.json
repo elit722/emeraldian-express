@@ -1,0 +1,108 @@
+{
+  "name": "Emeraldian Express",
+  "description": "The Last Voyage of the Emeraldian Express",
+  "url": "https://TON-DOMAINE.fr",
+  "sections": [
+    {
+      "key": "home",
+      "label": "Accueil",
+      "description": "Page d'accueil de l'événement"
+    },
+    {
+      "key": "info",
+      "label": "Informations",
+      "description": "Informations générales sur l'événement"
+    },
+    {
+      "key": "lore",
+      "label": "Lore",
+      "description": "L'histoire du voyage"
+    },
+    {
+      "key": "apply",
+      "label": "Candidater",
+      "description": "Candidature pour participer",
+      "requires_auth": true
+    },
+    {
+      "key": "reglement",
+      "label": "Règlement",
+      "description": "Règles de l'événement"
+    },
+    {
+      "key": "faq",
+      "label": "Questions",
+      "description": "Questions fréquentes et réponses du staff"
+    },
+    {
+      "key": "ajouts",
+      "label": "Nos ajouts",
+      "description": "Contenu créé pour l'événement"
+    },
+    {
+      "key": "trailer",
+      "label": "Trailers",
+      "description": "Vidéos et trailers"
+    },
+    {
+      "key": "live",
+      "label": "Live",
+      "description": "Lives et diffusion Twitch"
+    },
+    {
+      "key": "partenaires",
+      "label": "Partenaires",
+      "description": "Partenaires de l'événement"
+    },
+    {
+      "key": "staff",
+      "label": "Staff",
+      "description": "Équipe derrière l'événement"
+    },
+    {
+      "key": "about",
+      "label": "Qui sommes-nous ?",
+      "description": "Présentation du projet"
+    },
+    {
+      "key": "shots",
+      "label": "Screenshots",
+      "description": "Galerie de captures d'écran"
+    },
+    {
+      "key": "aide",
+      "label": "Aide",
+      "description": "Contacter le staff et obtenir de l'aide"
+    },
+    {
+      "key": "cgu",
+      "label": "CGU & légal",
+      "description": "Conditions, confidentialité et mentions légales"
+    },
+    {
+      "key": "credits",
+      "label": "Crédits",
+      "description": "Crédits du projet"
+    },
+    {
+      "key": "account",
+      "label": "Compte",
+      "description": "Espace personnel et liaison du compte Minecraft",
+      "requires_auth": true
+    }
+  ],
+  "permissions": [
+    {
+      "key": "emeraldian.read",
+      "description": "Consulter le site"
+    },
+    {
+      "key": "emeraldian.apply",
+      "description": "Candidater à l'événement"
+    },
+    {
+      "key": "emeraldian.account",
+      "description": "Accéder à son compte"
+    }
+  ]
+}
