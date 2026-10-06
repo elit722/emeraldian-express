@@ -448,25 +448,6 @@ nav button.nlv{padding:.1rem .6rem .1rem .5rem}
 #mini{min-height:0;left:max(1rem,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 3.2rem);font-size:.85rem;padding:.25rem .75rem .25rem .6rem}
 #ctl{left:max(1rem,env(safe-area-inset-left,0px))}
 }
-/* Lecteurs audio : position + volume */
-.ctr{display:grid;gap:.7rem;margin-top:1rem;width:100%;color:var(--fog)}
-.lrd .ctr{flex:1 1 100%;max-width:34rem;margin:0 auto}
-.ctk,.ctv,.sg{display:flex;align-items:center;gap:.8rem}
-.ctk .sk,.ctv .vl,.sg .vl{flex:1;min-width:0;height:1.6rem;accent-color:var(--brass);cursor:pointer}
-.ctk .sk:disabled{opacity:.45;cursor:not-allowed}
-.tm{font-size:.95rem;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:6.4rem;text-align:right}
-.ctv,.sg{font-style:italic}
-.ctv output,.sg output{min-width:3.4rem;text-align:right;font-style:normal;font-variant-numeric:tabular-nums}
-/* Paramètres */
-#stg{position:fixed;left:max(1rem,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 4.4rem);z-index:36;width:min(22rem,calc(100vw - 2rem));background:rgba(20,9,8,.96);border:1px solid var(--line);padding:1rem 1.2rem;color:var(--paper)}
-#stg[hidden]{display:none}
-#stg h4{margin:0 0 .7rem;font:400 1.2rem "IM Fell English SC",serif;color:var(--brass)}
-#stg .sg{flex-wrap:wrap}#stg .sg>span{flex:1 0 100%}
-@media(max-width:700px){#stg{left:.8rem;right:.8rem;width:auto}}
-/* Admin */
-#adm .btn[aria-pressed=true]{background:var(--brass);color:var(--ink)}
-#adm .row{margin-top:.6rem}
-body.edit-mode header{box-shadow:inset 0 -2px 0 var(--emerald)}
 </style>
 </head>
 <body>
@@ -628,25 +609,10 @@ body.edit-mode header{box-shadow:inset 0 -2px 0 var(--emerald)}
       <h3>Sessions ouvertes</h3><ul id="ss"></ul>
       <div class="row"><button class="btn" id="lo">Se déconnecter</button></div>
     </div>
-    <div class="pn acc" id="adm">
-      <h3>Accès administrateur</h3>
-      <div id="adO">
-        <p class="h">Réservé au staff : saisis le code de liaison admin pour lier ce compte à la fonction administrateur. Une fois lié, tu n'as pas besoin de te reconnecter.</p>
-        <form class="f" id="fAd" autocomplete="off">
-          <label for="adS">Code de liaison admin</label><input id="adS" type="password" autocomplete="new-password" required>
-          <button class="btn" type="submit">Lier à l'administration</button>
-        </form>
-      </div>
-      <div id="adI" hidden>
-        <p class="h">Ce compte est lié à la fonction administrateur.</p>
-        <div class="row"><button class="btn" id="adE" type="button" aria-pressed="false">Mode édition : désactivé</button><button class="mini" id="adU" type="button">Délier ce compte</button></div>
-      </div>
-    </div>
   </div>
 </div></section>
 </main>
-<div id="ctl"><button id="bm" aria-pressed="true">&#9835; Musique</button><button id="bt" aria-pressed="true">&#9728; Lanterne</button><button id="bs" type="button" aria-expanded="false" aria-controls="stg">&#9881; Paramètres</button></div>
-<div id="stg" role="dialog" aria-label="Paramètres" hidden><h4>Paramètres</h4><label class="sg"><span>Volume de la musique de fond</span><input type="range" class="vl" id="sgV" min="0" max="100" value="100" aria-label="Volume de la musique de fond"><output id="sgO">100 %</output></label></div>
+<div id="ctl"><button id="bm" aria-pressed="true">&#9835; Musique</button><button id="bt" aria-pressed="true">&#9728; Lanterne</button></div>
 <footer>The Last Voyage of the Emeraldian Express &middot; Événement non officiel, non affilié à Mojang ni à Microsoft.<br><button class="lk" data-go="cgu" data-leg="l-cgu">CGU</button> &middot; <button class="lk" data-go="cgu" data-leg="l-priv">Confidentialité</button> &middot; <button class="lk" data-go="cgu" data-leg="l-ment">Mentions légales</button></footer>
 <div id="lb"><button class="nv" id="pv" aria-label="Précédent">&#8249;</button><img alt=""><button class="nv" id="nx" aria-label="Suivant">&#8250;</button></div>
 
@@ -689,39 +655,17 @@ const P={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(
 const bt=$('#bt');function lamp(on){document.body.classList.toggle('nolamp',!on);bt.classList.toggle('off',!on);bt.setAttribute('aria-pressed',on);P.set('lamp',on?1:0)}
 bt.addEventListener('click',()=>lamp(document.body.classList.contains('nolamp')));lamp(P.get('lamp')!=='0');
 /* musique */
-let ac,out,muted=P.get('mute')==='1',foreground=null,bgv=parseFloat(P.get('bgvol'));if(!(bgv>=0&&bgv<=1))bgv=1;const bm=$('#bm');
+let ac,out,muted=P.get('mute')==='1',foreground=null;const bm=$('#bm');
 function mark(){bm.classList.toggle('off',muted);bm.setAttribute('aria-pressed',!muted)}mark();
 function begin(){if(ac)return;const A=window.AudioContext||window.webkitAudioContext;if(!A)return;ac=new A();
 out=ac.createGain();out.gain.value=0;out.connect(ac.destination);
 fetch('Assets/Son/dies_irae.mp3').then(r=>r.arrayBuffer()).then(data=>ac.decodeAudioData(data,buf=>{const src=ac.createBufferSource();src.buffer=buf;src.loop=true;src.connect(out);src.start();vol()},()=>{})).catch(()=>{});vol()}
-function vol(){if(ac){ac.resume();out.gain.setTargetAtTime(muted||foreground?0:.6*bgv,ac.currentTime,.28)}}
+function vol(){if(ac){ac.resume();out.gain.setTargetAtTime(muted||foreground?0:.6,ac.currentTime,.28)}}
 function claimForeground(owner,stop){if(foreground&&foreground.owner!==owner){const previous=foreground;foreground=null;previous.stop()}foreground={owner,stop};begin();vol()}
 function releaseForeground(owner){if(foreground&&foreground.owner===owner){foreground=null;vol()}}
 const audioFades=new WeakMap();function cancelAudioFade(a){const id=audioFades.get(a);if(id!==undefined)cancelAnimationFrame(id);audioFades.delete(a)}function fadeAudio(a,to,duration=260,done){cancelAudioFade(a);const from=a.volume,start=performance.now(),ms=still?0:duration;function step(now){const p=ms?Math.min(1,(now-start)/ms):1;a.volume=from+(to-from)*p;if(p<1)audioFades.set(a,requestAnimationFrame(step));else{audioFades.delete(a);if(done)done()}}audioFades.set(a,requestAnimationFrame(step))}
-/* contrôles partagés : position + volume d'un élément audio */
-function fmtT(s){if(!isFinite(s))return'–:––';s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
-function audCtl(audio,key,name){
- let lv=parseFloat(P.get(key));if(!(lv>=0&&lv<=1))lv=1;let seeking=false;
- const el=document.createElement('div');el.className='ctr';
- el.innerHTML='<div class="ctk"><input type="range" class="sk" min="0" max="1000" value="0" step="1" disabled aria-label="Position dans '+name+'"><span class="tm">0:00 / –:––</span></div><label class="ctv"><span>Volume</span><input type="range" class="vl" min="0" max="100" value="'+Math.round(lv*100)+'" aria-label="Volume : '+name+'"><output>'+Math.round(lv*100)+' %</output></label>';
- const sk=el.querySelector('.sk'),tm=el.querySelector('.tm'),vl=el.querySelector('.vl'),ov=el.querySelector('output');
- const draw=()=>{const d=audio.duration,ok=isFinite(d)&&d>0;sk.disabled=!ok;if(ok&&!seeking)sk.value=Math.round(audio.currentTime/d*1000);tm.textContent=fmtT(audio.currentTime)+' / '+fmtT(d)};
- sk.addEventListener('pointerdown',()=>{seeking=true});
- ['pointerup','pointercancel','blur'].forEach(ev=>sk.addEventListener(ev,()=>{seeking=false;draw()}));
- sk.addEventListener('input',()=>{const d=audio.duration;if(!isFinite(d)||!d)return;audio.currentTime=sk.value/1000*d;tm.textContent=fmtT(audio.currentTime)+' / '+fmtT(d)});
- ['timeupdate','loadedmetadata','durationchange','seeked','emptied'].forEach(ev=>audio.addEventListener(ev,draw));
- vl.addEventListener('input',()=>{lv=vl.value/100;ov.textContent=vl.value+' %';P.set(key,lv);if(!audio.paused&&!audio.ended){cancelAudioFade(audio);audio.volume=lv}});
- return{el,level:()=>lv}}
 addEventListener('pointerdown',()=>{if(!muted)begin()},{once:true});
 bm.addEventListener('click',()=>{muted=!muted;P.set('mute',muted?1:0);mark();begin();vol()});
-/* paramètres : volume de la musique de fond */
-(function(){const bs=$('#bs'),sp=$('#stg'),sv=$('#sgV'),so=$('#sgO');
- sv.value=Math.round(bgv*100);so.textContent=sv.value+' %';
- sv.addEventListener('input',()=>{bgv=sv.value/100;so.textContent=sv.value+' %';P.set('bgvol',bgv);vol()});
- const close=()=>{sp.hidden=true;bs.setAttribute('aria-expanded','false')};
- bs.addEventListener('click',()=>{const o=sp.hidden;sp.hidden=!o;bs.setAttribute('aria-expanded',String(o))});
- document.addEventListener('click',e=>{if(!sp.hidden&&!sp.contains(e.target)&&!bs.contains(e.target))close()});
- addEventListener('keydown',e=>{if(e.key==='Escape'&&!sp.hidden){close();bs.focus()}})})();
 /* diaporama d'accueil */
 const b1=$('.bg'),b2=$('.bg2');let bi=3;
 function slide(){if(now!=='home')return;bi=(bi+1)%figs.length;const u=figs[bi].querySelector('img').src;b2.src=u;b2.style.display='block';
@@ -738,17 +682,17 @@ const API='https://relink-auth.refugeemeraudien-direction.workers.dev';
 const DISCORD_CLIENT_ID='1333801116692910172';
 const TK='tlv_token',RED=()=>location.origin+location.pathname;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let me=null,curSid=null,tt,adm=false,edt=false;
+let me=null,curSid=null,tt;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),5000)}
 async function api(path,o={}){
  const t=P.get(TK);let r;
  try{r=await fetch(API+path,{method:o.method||'GET',headers:Object.assign({},o.body?{'Content-Type':'application/json'}:{},t?{Authorization:'Bearer '+t}:{}),body:o.body?JSON.stringify(o.body):undefined})}
  catch(e){const og=location.origin==='null'?'file://':location.origin;console.error('[api] échec réseau/CORS sur',path,'— origine à autoriser dans EXACT_ALLOWED_ORIGINS :',og,e);throw new Error('Connexion au serveur impossible depuis '+og+'. Réessaie ; si cela persiste, préviens le staff (adresse du site probablement absente de la liste CORS du Worker).')}
  let d=null;try{d=await r.json()}catch(e){}
- if(!r.ok){if(r.status===401&&t&&path!=='/auth/discord'&&path!=='/admin/link')drop();
+ if(!r.ok){if(r.status===401&&t&&path!=='/auth/discord')drop();
   const er=d&&d.error;let m=(er&&er.message)||(typeof er==='string'?er:'')||'Erreur '+r.status;if(d&&d.retry_after_ms){const ms=d.retry_after_ms;m+=' (dans '+(ms>36e5?Math.ceil(ms/36e5)+' h':Math.ceil(ms/6e4)+' min')+')'}const x=new Error(m);x.status=r.status;x.code=er&&er.code;x.path=path;x.ms=d&&d.retry_after_ms;throw x}
  return d}
-function drop(){P.set(TK,'');me=null;curSid=null;admSet(false,false);auth();if(now==='account')acct()}
+function drop(){P.set(TK,'');me=null;curSid=null;auth();if(now==='account')acct()}
 function auth(){const b=$('#au');
  if(me){b.textContent='';if(me.avatar_url){const i=new Image();i.src=me.avatar_url;i.alt='';b.append(i)}b.append(me.pseudo||'Compte');b.classList.add('in')}
  else{b.textContent='Connexion';b.classList.remove('in')}}
@@ -767,7 +711,7 @@ async function acct(){
  const t=P.get(TK);$('#acOut').hidden=!!t;$('#acIn').hidden=!t;if(!t)return;
  const [m,r,s]=await Promise.all([api('/me').catch(()=>null),api('/rewards/summary').catch(()=>null),api('/me/sessions').catch(()=>null)]);
  if(!P.get(TK))return;if(!m){toast('Impossible de charger ton compte.');return}
- me=m;auth();admSync(m);draw(m,r,s)}
+ me=m;auth();draw(m,r,s)}
 function draw(m,r,s){
  $('#acAv').src=m.avatar_url||'';$('#acN').textContent=m.pseudo;
  const mc=$('#acMc');mc.textContent=m.minecraft_username||'Non lié';mc.className=m.minecraft_username?'':'todo';
@@ -794,22 +738,6 @@ $('#fLink').addEventListener('submit',async e=>{e.preventDefault();
   toast(m);$('#lc').value='';$('#lr').value='';acct()}catch(x){toast(x.message)}});
 $('#lo').addEventListener('click',async()=>{try{if(curSid)await api('/me/sessions/'+encodeURIComponent(curSid),{method:'DELETE'})}catch(e){}drop();go('home')});
 $('#acLogin').addEventListener('click',login);
-/* ── Admin : liaison ADMIN_SECRET (Worker) + mode édition ── */
-function admUI(){const o=$('#adO'),i=$('#adI'),b=$('#adE');if(!o)return;
- o.hidden=adm;i.hidden=!adm;b.textContent='Mode édition : '+(edt?'activé':'désactivé');b.setAttribute('aria-pressed',edt);
- document.body.classList.toggle('edit-mode',edt)}
-function admSet(a,e){const was=adm+'|'+edt;adm=!!a;edt=adm&&!!e;P.set('tlv_adm',adm?1:0);P.set('tlv_edit',edt?1:0);admUI();
- if(was!==adm+'|'+edt)document.dispatchEvent(new CustomEvent('relink:editmode',{detail:{admin:adm,on:edt}}))}
-/* si le Worker renvoie is_admin dans /me, il fait foi ; sinon on garde l'état local */
-function admSync(m){if(m&&typeof m.is_admin==='boolean'&&m.is_admin!==adm)admSet(m.is_admin,edt)}
-window.RELINK_ADMIN={get isAdmin(){return adm},get editMode(){return edt}};
-adm=P.get('tlv_adm')==='1'&&!!P.get(TK);edt=adm&&P.get('tlv_edit')==='1';admUI();
-$('#fAd').addEventListener('submit',async e=>{e.preventDefault();const i=$('#adS'),b=$('#fAd button'),s=i.value;if(!s)return;b.disabled=true;
- try{await api('/admin/link',{method:'POST',body:{secret:s}});i.value='';admSet(true,false);toast('Compte lié à la fonction administrateur.')}
- catch(x){toast(x.status===401||x.status===403?'Code admin invalide.':x.message)}
- finally{b.disabled=false}});
-$('#adE').addEventListener('click',()=>{admSet(true,!edt);toast(edt?'Mode édition activé.':'Mode édition désactivé.')});
-$('#adU').addEventListener('click',async()=>{try{await api('/admin/unlink',{method:'POST'})}catch(e){}admSet(false,false);toast('Compte délié de la fonction administrateur.')});
 $('#au').addEventListener('click',()=>P.get(TK)?go('account'):login());
 const FLAGMAP={lore:'lore',reglement:'reglement',partenaires:'partenaires',ajouts:'ajouts',about:'about',staff:'staff',aide:'aide',apply:'team'};
 let FLAGS=window.RELINK_FLAGS||null;
@@ -830,7 +758,7 @@ const _show=show;show=function(id){
 (async()=>{
  applyFlags();
  const cb=await callback();
- if(P.get(TK)){try{me=await api('/me');auth();admSync(me)}catch(e){}}
+ if(P.get(TK)){try{me=await api('/me');auth()}catch(e){}}
  if(cb&&P.get(TK))show('account');else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(now)))show(now);else if(now==='account')acct()})();
 </script>
 
@@ -1034,19 +962,16 @@ async function loadStaff(){
  cards.forEach(c=>{const u=cache[c.dataset.keys];if(u){const a=c.querySelector('.av');a.innerHTML='<img alt="" src="'+A(u)+'">';a.classList.add('rl')}})}
 $('#parB').innerHTML=PARTNERS.map(p=>'<div class="card"><div class="av'+(p.sq?' sq':'')+'"><img alt="" src="'+IMG[p.i]+'"></div><span class="tag">'+A(p.b)+'</span><h3>'+A(p.n)+'</h3><p>'+A(p.d)+'</p><div class="links">'+p.l.map(l=>'<a class="mini" href="'+A(l[1])+'" target="_blank" rel="noopener">'+A(l[0])+'</a>').join('')+'</div></div>').join('');
 $('#addB').innerHTML=ADDS.map(a=>'<div class="card"><span class="tag">'+A(a[0])+'</span><h3>'+A(a[1])+'</h3><p>'+A(a[2])+'</p>'+(a[3]==='music'?'<button type="button" class="btn amb" id="amB" aria-pressed="false"><span class="amI" aria-hidden="true">▶</span> <span class="amT">Écouter la musique</span></button>':'')+'</div>').join('');
-(function(){const b=$('#amB');if(!b)return;let au=null,token=0,wanted=false,mc=null;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
- if(EVENT_MUSIC){au=new Audio(EVENT_MUSIC);au.preload='none';au.volume=0;mc=audCtl(au,'mvol','la musique originale');b.after(mc.el)}
- const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':(au&&au.currentTime>1&&!au.ended?'Reprendre':'Écouter la musique')};
- const stop=()=>{token++;wanted=false;if(au){cancelAudioFade(au);au.pause();au.currentTime=0;au.volume=0}releaseForeground('event-music');ui(false)};
- const ended=()=>{token++;wanted=false;if(au){cancelAudioFade(au);au.volume=0}releaseForeground('event-music');ui(false)};
- const prep=()=>{if(au&&au.preload==='none'){au.preload='metadata';au.load()}};
- if(au){au.addEventListener('ended',ended);au.addEventListener('error',()=>{if(!wanted)return;stop();T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200)})}
+(function(){const b=$('#amB');if(!b)return;let au=null,token=0;const I=b.querySelector('.amI'),T=b.querySelector('.amT');
+ const ui=on=>{b.setAttribute('aria-pressed',on);I.textContent=on?'❚❚':'▶';T.textContent=on?'Mettre en pause':'Écouter la musique'};
+ const stop=()=>{token++;if(au){cancelAudioFade(au);au.pause();au.currentTime=0;au.volume=0}releaseForeground('event-music');ui(false)};
+ const ended=()=>{token++;if(au){cancelAudioFade(au);au.volume=0}releaseForeground('event-music');ui(false)};
  b.addEventListener('click',()=>{
   if(!EVENT_MUSIC){T.textContent='Bientôt disponible';setTimeout(()=>ui(false),2200);return}
-  if(au.paused){wanted=true;const my=++token;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,mc.level())}}).catch(()=>{if(my===token)stop()})}
-  else{token++;wanted=false;cancelAudioFade(au);au.pause();au.volume=0;releaseForeground('event-music');ui(false)}});
- new MutationObserver(()=>{const on=$('#ajouts').classList.contains('on');if(!on&&au&&!au.paused)stop();else if(on)prep()}).observe($('#ajouts'),{attributes:true,attributeFilter:['class']});
- if($('#ajouts').classList.contains('on'))prep();
+  if(!au){au=new Audio(EVENT_MUSIC);au.preload='none';au.volume=0;au.addEventListener('ended',ended);au.addEventListener('error',()=>{stop();T.textContent='Lecture impossible';setTimeout(()=>ui(false),2200)})}
+  if(au.paused){const my=++token;cancelAudioFade(au);if(au.ended)au.currentTime=0;au.volume=0;claimForeground('event-music',stop);au.play().then(()=>{if(my===token&&!au.paused){ui(true);fadeAudio(au,1)}}).catch(()=>{if(my===token)stop()})}
+  else stop()});
+ new MutationObserver(()=>{if(au&&!au.paused&&!$('#ajouts').classList.contains('on'))stop()}).observe($('#ajouts'),{attributes:true,attributeFilter:['class']});
 })();
 $('#loreB').innerHTML=LORE.map(c=>'<div class="lb"><small>'+A(c.d)+'</small>'+c.p.map(t=>'<p>'+A(t)+'</p>').join('')+(c.q?'<blockquote>« '+A(c.q)+' »</blockquote>':'')+'</div>').join('');
 
@@ -1143,23 +1068,20 @@ const twSrc=ch=>'https://player.twitch.tv/?channel='+encodeURIComponent(ch)+twPa
  const bP=$('#lrP'),bS=$('#lrS'),ic=bP.querySelector('.lric'),tx=bP.querySelector('.lrtx');
  const audio=new Audio('Assets/Son/lorevocal.mp3');audio.preload='none';audio.volume=0;
  let state='idle',token=0;
- const lc=audCtl(audio,'lvol','le fichier vocal du lore');box.append(lc.el);
  function ui(){const on=state==='play',paused=state==='pause';bP.setAttribute('aria-pressed',on);ic.textContent=on?'❚❚':'▶';
   tx.textContent=on?'Pause':paused?'Reprendre':'Écouter le lore';bS.hidden=state==='idle'}
  function stop(){token++;state='idle';cancelAudioFade(audio);audio.pause();audio.currentTime=0;audio.volume=0;releaseForeground('lore');ui()}
  function ended(){token++;state='idle';cancelAudioFade(audio);audio.volume=0;releaseForeground('lore');ui()}
  audio.addEventListener('ended',ended);
- audio.addEventListener('error',()=>{if(state==='idle')return;stop();tx.textContent='Lecture impossible';setTimeout(ui,2200)});
+ audio.addEventListener('error',()=>{stop();tx.textContent='Lecture impossible';setTimeout(ui,2200)});
  function play(){const my=++token;cancelAudioFade(audio);if(audio.ended)audio.currentTime=0;audio.volume=0;audio.playbackRate=1;state='play';ui();claimForeground('lore',stop);
-  audio.play().then(()=>{if(my===token&&state==='play')fadeAudio(audio,lc.level())}).catch(()=>{if(my===token)stop()})}
+  audio.play().then(()=>{if(my===token&&state==='play')fadeAudio(audio,1)}).catch(()=>{if(my===token)stop()})}
  bP.addEventListener('click',()=>{
   if(state==='idle')play();
   else if(state==='play'){token++;state='pause';cancelAudioFade(audio);audio.pause();audio.volume=0;releaseForeground('lore');ui()}
   else play()});
  bS.addEventListener('click',stop);
- const prep=()=>{if(audio.preload==='none'){audio.preload='metadata';audio.load()}};
- new MutationObserver(()=>{const on=$('#lore').classList.contains('on');if(!on&&state!=='idle')stop();else if(on)prep()}).observe($('#lore'),{attributes:true,attributeFilter:['class']});
- if($('#lore').classList.contains('on'))prep();
+ new MutationObserver(()=>{if(!$('#lore').classList.contains('on')&&state!=='idle')stop()}).observe($('#lore'),{attributes:true,attributeFilter:['class']});
  addEventListener('pagehide',()=>{audio.pause();releaseForeground('lore')});
 })();
 
