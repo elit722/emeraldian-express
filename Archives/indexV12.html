@@ -423,30 +423,6 @@ button[data-send]{width:100%}
 .lg table{border-collapse:collapse;width:100%;min-width:34rem;font-size:1rem;line-height:1.45}
 .lg th,.lg td{border:1px solid var(--line);padding:.5rem .7rem;text-align:left;vertical-align:top}
 .lg th{color:var(--brass);font:1rem "IM Fell English SC","Times New Roman",serif;background:rgba(200,164,85,.08)}
-/* ── Ajustements mobile : header compact, chrono sans chevauchement, contrôles moins massifs ── */
-@media(max-width:700px){
-header{padding:calc(env(safe-area-inset-top,0px) + .5rem) .8rem .5rem;gap:.4rem}
-.brand{font-size:.9rem;line-height:1.15;min-width:0;flex:1 1 auto;padding:0}
-nav{flex:0 0 auto;gap:.3rem}
-nav button.nlv{min-height:38px;font-size:.85rem;padding:.1rem .55rem .1rem .45rem;gap:.3rem}
-#au,#bg{min-height:38px;font-size:.9rem;padding-top:0;padding-bottom:0}
-#au{max-width:6rem;padding-left:.55rem;padding-right:.55rem}
-#bg{padding-left:.65rem;padding-right:.65rem}
-#mini{min-height:0;left:.8rem;top:calc(env(safe-area-inset-top,0px) + 3.5rem);font-size:.82rem;padding:.25rem .7rem .25rem .55rem}
-#mini svg{width:.95rem;height:.95rem}
-#ctl{left:.7rem;right:4.9rem;gap:.5rem}
-#ctl button{min-height:40px;padding:.35rem .6rem;font-size:.95rem}
-}
-/* Téléphone en paysage : header sur une seule ligne, chrono placé juste en dessous */
-@media(max-height:500px) and (min-width:701px){
-header{flex-wrap:nowrap;gap:.6rem;padding:calc(env(safe-area-inset-top,0px) + .45rem) max(1rem,env(safe-area-inset-right,0px)) .45rem max(1rem,env(safe-area-inset-left,0px))}
-.brand{font-size:1rem;white-space:nowrap;padding:0}
-nav{flex-wrap:nowrap;gap:.8rem;align-items:center}
-nav button{font-size:.95rem;white-space:nowrap}
-nav button.nlv{padding:.1rem .6rem .1rem .5rem}
-#mini{min-height:0;left:max(1rem,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 3.2rem);font-size:.85rem;padding:.25rem .75rem .25rem .6rem}
-#ctl{left:max(1rem,env(safe-area-inset-left,0px))}
-}
 </style>
 </head>
 <body>
