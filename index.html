@@ -826,10 +826,11 @@ $('#fAd').addEventListener('submit',async e=>{e.preventDefault();const i=$('#adS
 $('#adE').addEventListener('click',()=>{admSet(true,!edt);toast(edt?'Mode édition activé.':'Mode édition désactivé.')});
 $('#adU').addEventListener('click',async()=>{P.set('tlv_ctok','');admSet(false,false);toast('Compte délié de la fonction administrateur.')});
 $('#au').addEventListener('click',()=>P.get(TK)?go('account'):login());
-const FLAGMAP={lore:'lore',reglement:'reglement',partenaires:'partenaires',ajouts:'ajouts',about:'about',staff:'staff',aide:'aide',apply:'team'};
 let FLAGS=window.RELINK_FLAGS||null;
-const flagOff=id=>!!(FLAGS&&FLAGMAP[id]&&FLAGS.sections&&FLAGS.sections[FLAGMAP[id]]===false);
-const siteOff=()=>!!(FLAGS&&FLAGS.site_enabled===false);
+/* Les clés de section du manifeste = les id des pages : plus de table de correspondance. « home » n'est jamais désactivable (page de repli). */
+const flagOff=id=>!!(FLAGS&&id!=='home'&&FLAGS.sections&&FLAGS.sections[id]===false);
+/* Maintenance : le Worker envoie maintenance:true (ou site_enabled:false) ; relink-flags.js affiche l'écran et lève RELINK_BYPASS pour les admins. */
+const siteOff=()=>!!(FLAGS&&(FLAGS.maintenance===true||FLAGS.site_enabled===false)&&!window.RELINK_BYPASS);
 const FREE=['home','account','cgu','credits','info'];
 function applyFlags(){
  document.querySelectorAll('[data-go]').forEach(b=>{b.hidden=siteOff()||flagOff(b.dataset.go)});
@@ -838,7 +839,7 @@ function applyFlags(){
 // relink-flags.js récupère les flags depuis le Worker et les transmet ici.
 document.addEventListener('relink:flags',e=>{FLAGS=e.detail||null;applyFlags();if(siteOff()&&now!=='home')show('home')});
 const _show=show;show=function(id){
- if(siteOff()){id='home';toast('Le site est momentanément en maintenance.')}
+ if(siteOff()){id='home'}
  else if(flagOff(id)){toast('Cette section est momentanément indisponible.');id='home'}
  if(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(id)){toast('Connecte-toi avec Discord pour accéder à cette page.');id='account'}
  _show(id);const f={account:acct,partenaires:()=>gate('partner'),apply:()=>{rulesOk=false;gate('team')},staff:()=>loadStaff(),aide:()=>prefill($('#g-aide'))}[id];if(f)f()};
@@ -1268,9 +1269,7 @@ function aideCd(){
  else{if(aideI){clearInterval(aideI);aideI=null}if(last)P.set(AK,'')}}
 aideCd();
 ['partner','team'].forEach(t=>{$('#g-'+t).innerHTML='<div class="pn" data-s="out"><p>Connexion Discord requise : elle garantit une seule candidature par compte.</p><button class="btn" data-login type="button">Connexion avec Discord</button></div><div class="pn" data-s="lock" hidden><h3>Candidature déjà envoyée</h3><p>Elle est définitive et a été transmise au staff. Il te répondra sur Discord.</p></div><div class="pn" data-s="err" hidden><p></p><button class="btn" data-retry="'+t+'" type="button">Réessayer</button></div>'+(t=='team'?"<div class=\"pn\" data-s=\"rules\" hidden><h3>Avant de candidater</h3><p class=\"h\">Lis ces règles de création de personnage : elles s'appliquent à toutes les candidatures.</p><ol class=\"rl\"><li><b>Crée un personnage RP.</b> Tu devras te créer un personnage « RP » basé sur un personnage imaginaire correspondant à peu près aux années 1883, année de lancement de l'Orient Express par la Compagnie internationale des wagons-lits (CIWL).</li><li><b>Pas d'autorité abusive sur le système.</b> Les personnages qui détiennent une autorité officielle sur le train ou sur les passagers sont interdits : Conducteur, Contrôleur, Chef de gare, Gendarme ou Détective.</li><li><b>Équilibre des rôles.</b> Si un rôle est déjà pris par plusieurs personnes et que nous estimons que cela nuit à l'événement (par exemple 5 journalistes sur 25 joueurs), nous nous réservons le droit de te demander d'en changer. Cela n'influera pas sur ta candidature.</li><li><b>Un civil, pas un rôle de jeu.</b> Ton personnage est un civil : son rôle en jeu reste secret et tiré au hasard, ce dernier influence forcément ton RP.</li><li><b>Respecte l'époque.</b> Nous sommes en 1883 : pas d'objet, de technologie, d'expression ni de référence modernes dans le nom, la profession ou l'histoire de ton personnage.</li><li><b>Pas de personnage surpuissant.</b> Ni invincible, ni doté de pouvoirs surnaturels qui le placeraient au-dessus des autres. Tout le monde a des failles.</li><li><b>Un personnage original.</b> Pas de personnalité réelle, ni de héros issu d'une œuvre existante. Le nom, l'identité et l'histoire doivent être les tiens.</li></ol><button class=\"btn\" type=\"button\" data-rules>J'ai pris connaissance de ces règles</button></div>":'')+'<div data-s="form" hidden>'+(t=='team'?'<div class="apl"><div>':'')+'<p class="h">⚠ '+FORMS[t].w+'</p>'+formHTML(t)+(t=='team'?'</div>'+"<aside class=\"pn roles\"><h3>Idées de rôles</h3><p class=\"h\">Quelques bases pour ton personnage. Tu peux aussi proposer le tien.</p><ul><li>Aristocrate excentrique, critique d'art</li><li>Passager clandestin</li><li>Journaliste d'investigation</li><li>Prestidigitateur / illusionniste</li><li>Jeune inventeur prodige</li><li>Voyageur nerveux (vendeur de substances)</li><li>Horloger suisse obsessionnel</li><li>Écrivaine de romans policiers</li><li>Riche investisseur</li><li>Cuistot</li><li>Médecin de la haute société</li><li>Collectionneur</li><li>Diplomate</li><li>Ancien colonel à la retraite</li><li>Veuve mystérieuse vêtue de noir</li><li>Serveur</li><li>Barman</li><li>Groom</li><li>Ingénieur de locomotive</li><li>Personnel d'entretien</li><li>Charbonnier</li><li>Musicien</li><li>etc.</li></ul></aside>"+'</div>':'')+'</div>'});
-let SUBP='/submissions/';
-async function subApi(t,o){try{return await api(SUBP+t,o)}catch(e){
- if(e.status===404&&e.code==='NOT_FOUND'&&SUBP==='/submissions/'){SUBP='/submission/';try{return await api(SUBP+t,o)}catch(e2){if(e2.status===404)SUBP='/submissions/';throw e2}}throw e}}
+const subApi=(t,o)=>api('/submission/'+t,o);
 const resv={};
 let rulesOk=false;
 async function gate(t){const g=$('#g-'+t),k=P.get(TK),q=s=>g.querySelector('[data-s='+s+']');
