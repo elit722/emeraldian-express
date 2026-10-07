@@ -1,4 +1,5 @@
 {
+  "slug": "emeraldian",
   "name": "Emeraldian Express",
   "description": "The Last Voyage of the Emeraldian Express",
   "url": "https://elit722.github.io/emeraldian-express/",
@@ -6,7 +7,7 @@
     {
       "key": "home",
       "label": "Accueil",
-      "description": "Page d'accueil de l'événement"
+      "description": "Page d'accueil de l'événement (toujours visible, ne peut pas être désactivée)"
     },
     {
       "key": "info",
@@ -21,7 +22,7 @@
     {
       "key": "apply",
       "label": "Candidater",
-      "description": "Candidature pour participer",
+      "description": "Candidature joueur (formulaire équipe, 1 par compte Discord)",
       "requires_auth": true
     },
     {
@@ -52,7 +53,7 @@
     {
       "key": "partenaires",
       "label": "Partenaires",
-      "description": "Partenaires de l'événement"
+      "description": "Partenaires de l'événement et candidature partenaire (1 par compte Discord)"
     },
     {
       "key": "staff",
@@ -87,22 +88,45 @@
     {
       "key": "account",
       "label": "Compte",
-      "description": "Espace personnel et liaison du compte Minecraft",
+      "description": "Espace personnel : profil, liaison Minecraft, récompenses et sessions",
       "requires_auth": true
     }
   ],
   "permissions": [
     {
       "key": "emeraldian.read",
-      "description": "Consulter le site"
+      "description": "Consulter le site",
+      "default_roles": [
+        "user"
+      ]
     },
     {
       "key": "emeraldian.apply",
-      "description": "Candidater à l'événement"
+      "description": "Candidater comme joueur (formulaire équipe)",
+      "default_roles": [
+        "user"
+      ]
+    },
+    {
+      "key": "emeraldian.partner",
+      "description": "Candidater comme partenaire",
+      "default_roles": [
+        "user"
+      ]
     },
     {
       "key": "emeraldian.account",
-      "description": "Accéder à son compte"
+      "description": "Accéder à son compte (profil, liaison Minecraft, récompenses)",
+      "default_roles": [
+        "user"
+      ]
+    },
+    {
+      "key": "emeraldian.edit",
+      "description": "Modifier le contenu du site (mode édition)",
+      "default_roles": [
+        "editor"
+      ]
     }
   ]
 }
