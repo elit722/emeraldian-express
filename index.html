@@ -816,7 +816,13 @@ function admUI(){const o=$('#adO'),i=$('#adI'),b=$('#adE');if(!o)return;
 function admSet(a,e){const was=adm+'|'+edt;adm=!!a;edt=adm&&!!e;P.set('tlv_adm',adm?1:0);P.set('tlv_edit',edt?1:0);admUI();
  if(was!==adm+'|'+edt)document.dispatchEvent(new CustomEvent('relink:editmode',{detail:{admin:adm,on:edt}}))}
 /* si le Worker renvoie is_admin dans /me, il fait foi ; sinon on garde l'état local */
-function admSync(){}
+async function admSync(){/* Droit d'édition via ReLink : permission emeraldian.edit (ou admin.access), sans code admin à saisir */
+  const t=P.get(TK);if(!t)return;
+  try{const r=await fetch(API+'/me/permissions?scope=emeraldian',{headers:{Authorization:'Bearer '+t}});if(!r.ok)return;
+   const p=(await r.json()).permissions||[];
+   if(p.includes('emeraldian.edit')||p.includes('admin.access')){P.set('tlv_ctok',t);if(!adm)admSet(true,false)}
+   else if(adm&&P.get('tlv_ctok')===t){P.set('tlv_ctok','');admSet(false,false)}
+  }catch(e){}}
 window.RELINK_ADMIN={get isAdmin(){return adm},get editMode(){return edt}};
 adm=P.get('tlv_adm')==='1'&&!!P.get(TK)&&!!P.get('tlv_ctok');edt=adm&&P.get('tlv_edit')==='1';admUI();
 $('#fAd').addEventListener('submit',async e=>{e.preventDefault();const i=$('#adS'),b=$('#fAd button'),s=i.value;if(!s)return;b.disabled=true;
