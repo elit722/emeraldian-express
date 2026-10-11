@@ -514,6 +514,67 @@ body.edit-mode .edbar.ed{display:flex!important}
 .qlw{display:flex;flex-direction:column;gap:.4rem}.qlw>.ql{flex:1;width:100%}
 .lgs .edb{margin:.4rem 0 .8rem}
 .steps li .edb{margin-left:.6rem;vertical-align:middle}
+/* ── Plan du train ── */
+#plan .wrap{max-width:78rem}
+.pl-back{margin:0 0 1.2rem}
+.pl-sheet{position:relative;background:linear-gradient(#efe4cb,#e3d6b8);color:var(--ink);border-radius:5px;box-shadow:0 18px 50px rgba(0,0,0,.55);padding:1.1rem 1.1rem 1rem;display:grid;grid-template-columns:3.6rem 1fr;gap:1rem}
+.pl-sheet::before{content:"";position:absolute;inset:.45rem;border:1px solid rgba(74,21,18,.35);pointer-events:none;border-radius:3px}
+.pl-tools{display:flex;flex-direction:column;gap:.55rem;align-items:center;padding-top:.3rem}
+.pl-tools button{width:2.9rem;height:2.9rem;border:1px solid rgba(74,21,18,.55);background:rgba(74,21,18,.06);color:var(--oxblood);cursor:pointer;font:1.05rem "IM Fell English SC",serif;display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1;padding:0;border-radius:3px;min-height:0}
+.pl-tools button small{font-size:.62rem;letter-spacing:.04em;margin-top:.1rem}
+.pl-tools button:hover:not(:disabled){background:var(--oxblood);color:var(--paper)}
+.pl-tools button.on{background:var(--oxblood);color:var(--paper)}
+.pl-tools button:disabled{opacity:.3;cursor:not-allowed}
+.pl-tools svg{width:1.3rem;height:1.3rem;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pl-tools hr{width:70%;border:0;border-top:1px solid rgba(74,21,18,.35);margin:.1rem 0}
+.pl-main{position:relative;min-width:0}
+.pl-hd{display:flex;justify-content:space-between;align-items:baseline;gap:.4rem 1rem;flex-wrap:wrap;border-bottom:3px double var(--oxblood);padding-bottom:.4rem;margin-bottom:.7rem}
+.pl-hd span{font:1.7rem "IM Fell English SC",serif;color:var(--oxblood)}
+.pl-hd i{color:#7a5a3a;font-size:1rem;letter-spacing:.06em}
+.pl-frame{position:relative;overflow:auto;border:1px solid rgba(74,21,18,.5);background:#e8dcc0;box-shadow:inset 0 0 40px rgba(74,21,18,.18);scrollbar-color:var(--oxblood) #e8dcc0}
+.pl-frame img{display:block;width:100%;height:auto;transition:opacity .25s;mix-blend-mode:multiply;user-select:none;-webkit-user-drag:none}
+.pl-frame.zoom img{width:210%;max-width:none}
+.pl-frame.zoom{cursor:grab}
+.pl-frame.sw img{opacity:0}
+.pl-fw{position:relative}
+.pl-nav{position:absolute;top:50%;transform:translateY(-50%);width:2.8rem;height:2.8rem;border-radius:50%;border:0;background:rgba(20,9,8,.78);color:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;padding:0;min-height:0}
+.pl-nav:hover:not(:disabled){background:var(--oxblood)}
+.pl-nav:disabled{opacity:.25;cursor:not-allowed}
+.pl-nav svg{width:1.2rem;height:1.2rem;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pl-nav.p{left:.6rem}.pl-nav.n{right:.6rem}
+.pl-dir{position:absolute;bottom:.5rem;font:.85rem "IM Fell English SC",serif;color:var(--oxblood);background:rgba(239,228,203,.85);padding:.05rem .5rem;border:1px solid rgba(74,21,18,.4);z-index:2;letter-spacing:.05em;pointer-events:none}
+.pl-dir.l{left:.6rem}.pl-dir.r{right:3.4rem}
+.pl-pg{position:absolute;right:.6rem;bottom:.4rem;font:1.35rem "IM Fell English SC",serif;color:var(--oxblood);background:rgba(239,228,203,.9);padding:0 .45rem;z-index:2;pointer-events:none}
+.pl-tt{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin:.9rem 0 .2rem}
+.pl-tt h3{margin:0;font-size:1.7rem;color:var(--oxblood)}
+.pl-tt p{margin:.1rem 0 0;font-style:italic;color:#5a3d28;max-width:46rem}
+.pl-fl{display:inline-flex;gap:.3rem;align-items:center;font:1rem "IM Fell English SC",serif;color:var(--oxblood);border:1px solid var(--oxblood);padding:.1rem .7rem;letter-spacing:.05em;white-space:nowrap}
+.pl-strip{display:flex;gap:.3rem;overflow-x:auto;padding:.55rem .1rem .4rem;margin-top:.5rem;border-top:1px dotted rgba(74,21,18,.4);scrollbar-color:var(--oxblood) transparent}
+.pl-strip button{flex:1 0 3.1rem;min-height:0;border:1px solid rgba(74,21,18,.55);background:rgba(74,21,18,.07);color:var(--oxblood);font:1.05rem "IM Fell English SC",serif;padding:.3rem .2rem .25rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.1rem;line-height:1;position:relative;border-radius:2px 2px 0 0}
+.pl-strip button small{font-size:.58rem;letter-spacing:.03em;opacity:.8;white-space:nowrap}
+.pl-strip button::after{content:"";position:absolute;left:18%;right:18%;bottom:-.42rem;height:.22rem;border-radius:50%;background:radial-gradient(circle,var(--oxblood) 40%,transparent 45%) 0 0/.5rem .22rem repeat-x;opacity:.55}
+.pl-strip button:hover:not(:disabled){background:rgba(74,21,18,.2)}
+.pl-strip button.on{background:var(--oxblood);color:var(--paper)}
+.pl-strip button:disabled{opacity:.28;cursor:not-allowed}
+.pl-strip button.two::before{content:"2";position:absolute;top:-.45rem;right:-.2rem;width:1rem;height:1rem;border-radius:50%;background:var(--brass);color:var(--ink);font:.7rem "IM Fell English SC",serif;display:flex;align-items:center;justify-content:center}
+.pl-leg{margin-top:1rem;border-top:3px double var(--oxblood);padding-top:.7rem}
+.pl-leg[hidden]{display:none}
+.pl-leg h4{margin:0 0 .4rem;font:1.2rem "IM Fell English SC",serif;color:var(--oxblood);letter-spacing:.06em}
+.pl-leg ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.1rem 1.6rem}
+.pl-leg li{padding:.3rem 0;border-bottom:1px dotted rgba(74,21,18,.35);display:flex;gap:.6rem;align-items:baseline}
+.pl-leg li b{font:1.05rem "IM Fell English SC",serif;color:var(--oxblood);font-weight:400;min-width:1.1rem}
+.pl-leg li span{color:#3b2417}
+.pl-hint{text-align:center;color:var(--fog);font-style:italic;font-size:1rem;margin:1rem 0 0}
+@media(max-width:700px){
+.pl-sheet{grid-template-columns:1fr;padding:.8rem .7rem}
+.pl-tools{flex-direction:row;justify-content:center;flex-wrap:wrap;padding:0}
+.pl-tools hr{width:0;height:1.8rem;border-top:0;border-left:1px solid rgba(74,21,18,.35)}
+.pl-tools button{width:3rem;height:3rem}
+.pl-hd span,.pl-tt h3{font-size:1.35rem}
+.pl-nav{width:2.6rem;height:2.6rem}
+.pl-frame img{width:230%;max-width:none}.pl-frame.zoom img{width:420%}.pl-dir{display:none}.pl-pg{font-size:1.1rem}
+}
+@media(prefers-reduced-motion:reduce){.pl-frame img{transition:none}}
 </style>
 </head>
 <body>
@@ -567,6 +628,35 @@ body.edit-mode .edbar.ed{display:flex!important}
     <p class="h" id="i3note"></p>
     <div class="row"><button class="btn" data-go="apply">Candidater</button><button class="btn" data-go="account">Mon compte</button></div></div>
   <div class="tp" id="i4"><div class="ed edbar"><button type="button" data-ed="add" data-k="links">+ Ajouter un lien rapide</button></div><div class="grid" id="linkB"></div></div>
+</div></section>
+
+<section id="plan" class="page"><div class="wrap">
+  <h2>Plan du train</h2><div class="rule"></div>
+  <p class="lead">Le plan complet des wagons, de la locomotive à la plateforme arrière. Passe d'un wagon à l'autre avec les flèches, et d'un étage à l'autre avec les boutons de gauche.</p>
+  <div class="pl-back"><button type="button" class="mini" data-to="info">← Retour aux informations</button></div>
+  <div class="pl-sheet" id="plS">
+    <div class="pl-tools" role="toolbar" aria-label="Outils du plan">
+      <button type="button" id="plUp" aria-label="Monter à l'étage 2" title="Étage supérieur"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><small>Étage 2</small></button>
+      <button type="button" id="plDn" aria-label="Descendre à l'étage 1" title="Étage inférieur"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg><small>Étage 1</small></button>
+      <hr>
+      <button type="button" id="plZ" aria-pressed="false" aria-label="Agrandir le plan" title="Agrandir / réduire"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5M10.5 8v5M8 10.5h5"/></svg><small>Zoom</small></button>
+      <button type="button" id="plL" class="on" aria-pressed="true" aria-label="Afficher la légende" title="Légende"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg><small>Légende</small></button>
+    </div>
+    <div class="pl-main">
+      <div class="pl-hd"><span>Plan des wagons</span><i id="plHdI">Étage 1 · Plan 1/14</i></div>
+      <div class="pl-fw">
+        <button type="button" class="pl-nav p" id="plP" aria-label="Wagon précédent (vers la locomotive)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="pl-nav n" id="plN" aria-label="Wagon suivant (vers l'arrière)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <span class="pl-dir l">← Locomotive</span><span class="pl-dir r">Arrière →</span>
+        <span class="pl-pg" id="plPg">1</span>
+        <div class="pl-frame" id="plF" tabindex="0" aria-label="Plan du wagon"><img id="plI" alt="" decoding="async"></div>
+      </div>
+      <div class="pl-tt"><div><h3 id="plT"></h3><p id="plD"></p></div><span class="pl-fl" id="plFl"></span></div>
+      <div class="pl-strip" id="plSt" role="tablist" aria-label="Choisir un wagon"></div>
+      <div class="pl-leg" id="plLg"><h4>Légende</h4><ul id="plLu"></ul></div>
+    </div>
+  </div>
+  <p class="pl-hint">Astuce : les flèches ← → du clavier changent de wagon, ↑ ↓ changent d'étage. Sur mobile, balaie le plan.</p>
 </div></section>
 
 <section id="shots" class="page"><div class="wrap">
@@ -990,7 +1080,8 @@ const INFOS=[
  ["Pièges RP","Pièges avec justification RP uniquement."],
  ["Mort définitive","Une seule vie pour cette aventure : mort = spectator."]]},
 {t:"Map & Monde",i:[
- ["Taille de la map","X wagons.",1],
+ ["Taille de la map","14 wagons, dont deux à double étage."],
+ ["Plan du train","Le plan détaillé de chaque wagon, étage par étage.",0,"plan","Ouvrir le plan"],
  ["Génération du monde","Carte entièrement custom, composée de zones uniques et de nombreux secrets à découvrir."]]},
 {t:"Autres",i:[
  ["Stream & Enregistrement","Vous pouvez streamer et enregistrer sans restriction (hors triche, bien sûr). La priorité de publication YouTube va au RE : merci de ne rien sortir avant eux !"],
@@ -1572,6 +1663,73 @@ document.addEventListener('click',async e=>{
 try{const c=JSON.parse(localStorage.getItem('tlv_cc')||'null');if(c&&c.data&&typeof c.data==='object'){OV=c.data;REV=c.rev||0}}catch(e){}
 applyContent(OV);
 if(CONTENT_API){loadContent();if(adm)api2('/admin/check').catch(()=>{})}
+})();
+</script>
+<script>
+/* ── Plan du train : données et système d'étages ── */
+(function(){
+const IMGP='Assets/Plans/';
+/* e1 / e2 : étages ; r : pièces affichées dans la légende */
+const WG=[
+{n:'Locomotive',d:"La machine de tête : cabine de conduite et chaudière.",e1:'w01',r:['Cabine de conduite','Chaudière','Commandes de la locomotive']},
+{n:'Soute à charbon',d:"Le tender, rempli du charbon qui alimente la locomotive.",e1:'w02',r:['Réserve de charbon']},
+{n:'Salon vert',d:"Un salon feutré aux boiseries claires et au tapis vert.",e1:'w03',r:['Salon vert','Banquettes et tables basses']},
+{n:'Chambre 1',d:"La première cabine passagers, avec sa salle d'eau carrelée.",e1:'w04',r:['Chambre 1','Salle d\u2019eau']},
+{n:'Salon rouge & bar',d:"Un wagon de réception au décor pourpre, organisé autour d'un comptoir.",e1:'w05',r:['Bar et tabourets','Coin salon','Banquettes']},
+{n:'Chambres 2 et 3',d:"Deux cabines voisines, séparées par un couloir latéral.",e1:'w06',r:['Chambre 2','Chambre 3','Couloir']},
+{n:'Casino',d:"Un wagon à deux étages : salon bleu en bas, salle de jeu en haut.",e1:'w07-e1',e2:'w07-e2',r1:['Salon bleu','Coin repas','Banquettes'],r2:['Machines à sous','Tables et fauteuils','Bar central']},
+{n:'Restaurant',d:"Un wagon à deux étages : salon et cuisine en bas, grande salle à manger en haut.",e1:'w08-e1',e2:'w08-e2',r1:['Salon bleu','Cuisine','Banquettes'],r2:['Grande table centrale','Tables pour deux','Office']},
+{n:'Chambres 4 à 7',d:"Quatre cabines réparties de part et d'autre du couloir central.",e1:'w09',r:['Chambre 4','Chambre 5','Chambre 6','Chambre 7']},
+{n:'Grand salon rouge',d:"Un salon de réception somptueux, bibliothèques et fauteuils.",e1:'w10',r:['Salon rouge','Bibliothèques','Fauteuils','Coin boissons']},
+{n:'Salon bleu',d:"Un salon cossu aux banquettes turquoise et à la table basse.",e1:'w11',r:['Salon bleu','Banquettes','Petite cuisine']},
+{n:'Chambres 8 à 10',d:"Les trois dernières cabines passagers du train.",e1:'w12',r:['Chambre 8','Chambre 9','Chambre 10']},
+{n:'Wagon-coffre',d:"Le wagon sécurisé : chambre froide, vault et stockage postal.",e1:'w13',r:['Chambre froide','Vault','Stockage postale']},
+{n:'Plateforme arrière',d:"La queue du train : plateforme ouverte, caisses et rails.",e1:'w14',r:['Plateforme ouverte','Caisses et rails']}];
+const $p=s=>document.querySelector(s),F=$p('#plF'),I=$p('#plI');
+if(!F)return;
+let w=0,fl=1,zoom=false;
+const has2=i=>!!WG[i].e2;
+const rom=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV'];
+const st=$p('#plSt');
+st.innerHTML=WG.map((g,i)=>'<button type="button" role="tab" data-i="'+i+'"'+(has2(i)?' class="two" title="Deux étages"':'')+'>'+(i+1)+'<small>'+(i==0?'Loco':i==WG.length-1?'Queue':'Wagon')+'</small></button>').join('');
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function pre(i,f){const g=WG[i];if(!g)return;const k=f==2&&g.e2?g.e2:g.e1;(new Image).src=IMGP+k+'.webp'}
+function nextOk(d){let j=w+d;while(j>=0&&j<WG.length){if(fl==1||has2(j))return j;j+=d}return -1}
+function render(){const g=WG[w];if(fl==2&&!has2(w))fl=1;
+ const key=fl==2?g.e2:g.e1,src=IMGP+key+'.webp';
+ F.classList.add('sw');
+ const done=()=>{I.alt='Plan du wagon '+(w+1)+' : '+g.n+(has2(w)?', étage '+fl:'');F.classList.remove('sw')};
+ const t=new Image;t.onload=t.onerror=()=>{I.src=src;setTimeout(done,30)};t.src=src;
+ $p('#plT').textContent='Wagon '+(w+1)+' · '+g.n;
+ $p('#plD').textContent=g.d;
+ $p('#plPg').textContent=(w+1);
+ $p('#plHdI').textContent=(has2(w)?'Étage '+fl+' · ':'Rez · ')+'Plan '+(w+1)+'/'+WG.length;
+ $p('#plFl').textContent=has2(w)?'Étage '+rom[fl]+' / II':'Étage unique';
+ const rooms=(fl==2?g.r2:g.r1)||g.r;
+ $p('#plLu').innerHTML=rooms.map((r,i)=>'<li><b>'+(i+1)+'</b><span>'+esc(r)+'</span></li>').join('');
+ $p('#plLg h4').textContent='Légende · '+g.n+(has2(w)?' · étage '+fl:'');
+ st.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('on',i==w);b.setAttribute('aria-selected',i==w);b.disabled=(fl==2&&!has2(i))});
+ $p('#plP').disabled=nextOk(-1)<0;$p('#plN').disabled=nextOk(1)<0;
+ $p('#plUp').disabled=!(has2(w)&&fl==1);$p('#plDn').disabled=!(fl==2);
+ $p('#plUp').classList.toggle('on',fl==2);$p('#plDn').classList.toggle('on',fl==1&&has2(w));
+ const a=st.querySelector('.on');if(a&&a.scrollIntoView)try{st.scrollTo({left:a.offsetLeft-st.clientWidth/2+a.clientWidth/2,behavior:'smooth'})}catch(e){}
+ F.scrollLeft=0;pre(w-1,fl);pre(w+1,fl);pre(w,fl==1?2:1)}
+function step(d){const j=nextOk(d);if(j>=0){w=j;render()}}
+function setFl(f){if(f==2&&!has2(w)){/* pas d'étage 2 ici : saute au plus proche wagon à deux étages */let j=-1,best=99;WG.forEach((g,i)=>{if(g.e2&&Math.abs(i-w)<best){best=Math.abs(i-w);j=i}});if(j<0)return;w=j}fl=f;render()}
+$p('#plP').onclick=()=>step(-1);$p('#plN').onclick=()=>step(1);
+$p('#plUp').onclick=()=>setFl(2);$p('#plDn').onclick=()=>setFl(1);
+$p('#plZ').onclick=function(){zoom=!zoom;F.classList.toggle('zoom',zoom);this.classList.toggle('on',zoom);this.setAttribute('aria-pressed',zoom);F.scrollLeft=0};
+$p('#plL').onclick=function(){const h=$p('#plLg').hidden=!$p('#plLg').hidden;this.classList.toggle('on',!h);this.setAttribute('aria-pressed',!h)};
+st.addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(b&&!b.disabled){w=+b.dataset.i;render()}});
+/* glisser pour déplacer en mode zoom, balayage pour changer de wagon sinon */
+let sx=0,sy=0,sl=0,drag=false,moved=false;
+F.addEventListener('pointerdown',e=>{if(e.target.closest('.pl-nav'))return;drag=true;moved=false;sx=e.clientX;sy=e.clientY;sl=F.scrollLeft});
+addEventListener('pointermove',e=>{if(!drag)return;if(zoom){F.scrollLeft=sl-(e.clientX-sx)}if(Math.abs(e.clientX-sx)>6)moved=true});
+addEventListener('pointerup',e=>{if(!drag)return;drag=false;const dx=e.clientX-sx,dy=e.clientY-sy;if(!zoom&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)step(dx<0?1:-1)});
+F.addEventListener('dblclick',()=>$p('#plZ').click());
+addEventListener('keydown',e=>{if(!$p('#plan').classList.contains('on'))return;if(/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||'')))return;
+ if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowUp'){e.preventDefault();setFl(2)}else if(e.key==='ArrowDown'){e.preventDefault();setFl(1)}});
+render();
 })();
 </script>
 </body>
