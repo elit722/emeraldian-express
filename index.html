@@ -485,6 +485,14 @@ body.edit-mode .edbar.ed{display:flex!important}
 .lvc .edb,.sh .edb{margin:.3rem}
 .afl{display:grid;gap:.9rem;margin-top:.4rem}.afl:empty{display:none}
 .afa .ctr{margin-top:.6rem}
+#apv{position:fixed;inset:0;z-index:55;background:rgba(10,4,3,.88);display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow:auto}
+#apv.on{display:flex;animation:enter .4s both}
+.apvb{width:100%;max-width:62rem;margin:auto;background:var(--ink);border:1px solid var(--brass);box-shadow:0 18px 60px rgba(0,0,0,.7);padding:0 1.5rem 1.5rem}
+.apvh{position:sticky;top:0;z-index:2;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--ink);padding:1rem 0;border-bottom:1px solid var(--line);margin-bottom:1.2rem}
+.apvh p{margin:0;flex:1 1 16rem}
+.apvh .btn{width:auto;min-width:6rem}
+.apvf{margin-top:1.5rem;display:flex;justify-content:center}
+.apvf .btn{width:auto}
 .edm{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.75);display:grid;place-items:center;padding:1rem;overflow:auto}
 .edp{background:#140908;border:1px solid var(--brass);width:min(46rem,100%);max-height:calc(100dvh - 2rem);display:flex;flex-direction:column;color:var(--paper);margin:0}
 .edp h3{margin:0;padding:1rem 1.3rem;color:var(--brass);border-bottom:1px solid var(--line);font-weight:400;font-size:1.5rem}
@@ -751,6 +759,7 @@ setTimeout(slide,3000);setInterval(slide,6500);
 show(location.hash.slice(1)&&document.getElementById(location.hash.slice(1))?location.hash.slice(1):'home');
 </script>
 
+<div id="apv" role="dialog" aria-modal="true" aria-label="Aperçu de ton compte"><div class="apvb"><div class="apvh"><p><b>Tu es connecté.</b> Ta candidature n'est <b>pas encore envoyée</b> : clique sur OK pour revenir au formulaire.</p><button class="btn" type="button" data-apv-ok>OK</button></div><div id="apvB"></div><div class="apvf"><button class="btn" type="button" data-apv-ok>OK — retourner à ma candidature</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 /* ── Compte ReLink (Worker Cloudflare + Discord OAuth2) ── */
@@ -772,7 +781,7 @@ function drop(){P.set(TK,'');me=null;curSid=null;admSet(false,false);auth();if(n
 function auth(){const b=$('#au');
  if(me){b.textContent='';if(me.avatar_url){const i=new Image();i.src=me.avatar_url;i.alt='';b.append(i)}b.append(me.pseudo||'Compte');b.classList.add('in')}
  else{b.textContent='Connexion';b.classList.remove('in')}}
-function login(){const s=crypto.randomUUID();try{sessionStorage.setItem('tlv_state',s)}catch(e){}
+function login(ret){const s=crypto.randomUUID();try{sessionStorage.setItem('tlv_state',s);if(typeof ret==='string')sessionStorage.setItem('tlv_ret',ret);else sessionStorage.removeItem('tlv_ret')}catch(e){}
  location.href='https://discord.com/oauth2/authorize?'+new URLSearchParams({client_id:DISCORD_CLIENT_ID,response_type:'code',redirect_uri:RED(),scope:'identify email',state:s})}
 async function callback(){
  const q=new URLSearchParams(location.search),code=q.get('code');if(!code&&!q.get('error'))return false;
@@ -854,11 +863,25 @@ const _show=show;show=function(id){
  else if(flagOff(id)){toast('Cette section est momentanément indisponible.');id='home'}
  if(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(id)){toast('Connecte-toi avec Discord pour accéder à cette page.');id='account'}
  _show(id);const f={account:acct,partenaires:()=>gate('partner'),apply:()=>{rulesOk=false;gate('team')},staff:()=>loadStaff(),aide:()=>prefill($('#g-aide'))}[id];if(f)f()};
+/* ── Aperçu flottant du compte après connexion depuis Candidater / Partenaires ── */
+const RET_OK=['apply','partenaires'];
+function takeRet(){let r=null;try{r=sessionStorage.getItem('tlv_ret');sessionStorage.removeItem('tlv_ret')}catch(e){}return RET_OK.includes(r)?r:null}
+let apvHome=null,apvNext=null;
+async function apvOpen(){const m=$('#apv'),ac=$('#acIn');if(m.classList.contains('on'))return;
+ await acct();if(!P.get(TK))return;
+ apvHome=ac.parentNode;apvNext=ac.nextSibling;$('#apvB').appendChild(ac);
+ $('#apvB').querySelectorAll('.rv').forEach(e=>e.classList.add('in'));
+ m.classList.add('on');m.scrollTop=0;document.body.style.overflow='hidden';const ok=m.querySelector('[data-apv-ok]');if(ok)ok.focus()}
+function apvClose(){const m=$('#apv');if(!m.classList.contains('on'))return;m.classList.remove('on');document.body.style.overflow='';
+ const ac=$('#acIn');if(apvHome){apvHome.insertBefore(ac,apvNext&&apvNext.parentNode===apvHome?apvNext:null)}apvHome=apvNext=null}
+$('#apv').addEventListener('click',e=>{if(e.target.closest('[data-apv-ok]')||e.target===$('#apv'))apvClose()});
+$('#lo').addEventListener('click',apvClose);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#apv').classList.contains('on')&&$('#stg').hidden)apvClose()});
 (async()=>{
  applyFlags();
- const cb=await callback();
+ const cb=await callback();const ret=takeRet();
  if(P.get(TK)){try{me=await api('/me');auth();admSync(me)}catch(e){}}
- if(cb&&P.get(TK))show('account');else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(now)))show(now);else if(now==='account')acct()})();
+ if(cb&&P.get(TK)){if(ret){show(ret);if(now===ret)apvOpen()}else show('account')}else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(now)))show(now);else if(now==='account')acct()})();
 </script>
 
 <script>
@@ -1305,7 +1328,7 @@ async function send(t){const box=$('#f-'+t),st=box.querySelector('.st'),btn=box.
   if(e.status)m+=' [HTTP '+e.status+(e.code?' '+e.code:'')+' · '+e.path+']';
   st.textContent=m+(resv[t]?' — Ta place est réservée : clique de nouveau sur « Envoyer » (rien n\'est perdu tant que tu ne quittes pas la page).':'')}}
 document.addEventListener('click',e=>{const s=e.target.closest('[data-send]');if(s)send(s.dataset.send);
- if(e.target.closest('[data-login]'))login();const r=e.target.closest('[data-retry]');if(r)gate(r.dataset.retry);
+ if(e.target.closest('[data-login]'))login(now);const r=e.target.closest('[data-retry]');if(r)gate(r.dataset.retry);
  if(e.target.closest('[data-rules]')){rulesOk=true;gate('team');window.scrollTo({top:0,behavior:'smooth'})}
  const tb=e.target.closest('[data-tab]');if(tb){const w=tb.closest('.wrap');w.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b===tb));w.querySelectorAll('.tp').forEach(p=>p.classList.toggle('on',p.id===tb.dataset.tab));watch()}
  const l=e.target.closest('[data-leg]');if(l){const b=document.querySelector('[data-tab="'+l.dataset.leg+'"]');if(b)b.click()}});
