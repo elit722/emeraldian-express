@@ -938,7 +938,10 @@ $('#adU').addEventListener('click',async()=>{P.set('tlv_ctok','');admSet(false,f
 $('#au').addEventListener('click',()=>P.get(TK)?go('account'):login());
 let FLAGS=window.RELINK_FLAGS||null;
 /* Les clés de section du manifeste = les id des pages : plus de table de correspondance. « home » n'est jamais désactivable (page de repli). */
-const flagOff=id=>!!(FLAGS&&id!=='home'&&FLAGS.sections&&FLAGS.sections[id]===false);
+/* « plan » est une sous-page d'Informations : elle a son propre flag (clé « plan » du manifeste) ET est coupée si « info » l'est. Côté accès, elle suit « info » (page libre). */
+const SUBPAGE={plan:'info'};
+const _off=id=>!!(FLAGS&&id!=='home'&&FLAGS.sections&&FLAGS.sections[id]===false);
+const flagOff=id=>_off(id)||(SUBPAGE[id]?_off(SUBPAGE[id]):false);
 /* Maintenance : le Worker envoie maintenance:true (ou site_enabled:false) ; relink-flags.js affiche l'écran et lève RELINK_BYPASS pour les admins. */
 const siteOff=()=>!!(FLAGS&&(FLAGS.maintenance===true||FLAGS.site_enabled===false)&&!window.RELINK_BYPASS);
 const FREE=['home','account','cgu','credits','info'];
@@ -951,7 +954,7 @@ document.addEventListener('relink:flags',e=>{FLAGS=e.detail||null;applyFlags();i
 const _show=show;show=function(id){
  if(siteOff()){id='home'}
  else if(flagOff(id)){toast('Cette section est momentanément indisponible.');id='home'}
- if(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(id)){toast('Connecte-toi avec Discord pour accéder à cette page.');id='account'}
+ if(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(SUBPAGE[id]||id)){toast('Connecte-toi avec Discord pour accéder à cette page.');id='account'}
  _show(id);const f={account:acct,partenaires:()=>gate('partner'),apply:()=>{rulesOk=false;gate('team')},staff:()=>loadStaff(),aide:()=>prefill($('#g-aide'))}[id];if(f)f()};
 /* ── Aperçu flottant du compte après connexion depuis Candidater / Partenaires ── */
 const RET_OK=['apply','partenaires'];
@@ -971,7 +974,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#apv').classList.contains
  applyFlags();
  const cb=await callback();const ret=takeRet();
  if(P.get(TK)){try{me=await api('/me');auth();admSync(me)}catch(e){}}
- if(cb&&P.get(TK)){if(ret){show(ret);if(now===ret)apvOpen()}else show('account')}else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(now)))show(now);else if(now==='account')acct()})();
+ if(cb&&P.get(TK)){if(ret){show(ret);if(now===ret)apvOpen()}else show('account')}else if(flagOff(now)||(FLAGS&&FLAGS.require_auth&&!P.get(TK)&&!FREE.includes(SUBPAGE[now]||now)))show(now);else if(now==='account')acct()})();
 </script>
 
 <script>
@@ -1132,11 +1135,11 @@ const FAQ=[
 ["Puis-je streamer ou filmer l'événement ?","Oui bien sûr, tant que vous respectez le RP et n'exploitez pas le live à des fins de triche ou de coordination via un chat externe. La priorité de publication YouTube va au RE : merci de ne rien sortir avant eux !"],
 ["Je peux rejoindre le staff pour l'événement ?","Pas pour cet événement, mais nous cherchons des animateurs pour produire de futurs events.\nEnfin, n'oubliez pas que nous recrutons ! Pour candidater : remplissez [ce formulaire](https://forms.gle/3GmedvfxgDCumTTG6) et ouvrez un ticket pour nous dire que vous avez candidaté.\nNos recrutements sont ouverts à tous les postes, mais surtout aux potentiels animateurs : on vous demande d'être assez actif. On vous attend aussi si vous avez un talent spécial à proposer (pour ça, n'hésitez pas à nous envoyer un MP).\nOn se garde le droit de refuser toute candidature inappropriée, troll, ou pour toute autre raison qu'on voudrait garder secrète ou non.\nNos recrutements sont fermés aux mineurs de moins de 16 ans.","aide","Page Aide"]];
 const rmn=n=>{let r='';for(const[v,s]of[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']])while(n>=v){r+=s;n-=v}return r};
-const tkRow=x=>{const td=x[2]&&!/\d/.test(x[1]);return'<dt>'+A(x[0])+'</dt><dd'+(td?' class="todo"':'')+'>'+A(x[1])+(x[3]?' <button class="mini" data-to="'+x[3]+'">'+A(x[4])+'</button>':'')+'</dd>'};
+const tkRow=x=>{const td=x[2]&&!/\d/.test(x[1]);return'<dt>'+A(x[0])+'</dt><dd'+(td?' class="todo"':'')+'>'+A(x[1])+(x[3]&&!flagOff(x[3])?' <button class="mini" data-to="'+x[3]+'">'+A(x[4])+'</button>':'')+'</dd>'};
 function renderInfo(){return INFOS.map((s,si)=>{let h='<h3 class="isec">'+A(s.t)+'</h3>';
  if(si==0)h+='<div class="tk big"><div class="tk-main"><div class="tk-hd"><span>Billet de voyage</span><i>N° 001 · Classe unique</i></div><dl>'+s.i.map(tkRow).join('')+'</dl></div><div class="tk-stub"><small>Dernier voyage</small><b>Départ</b><span>'+(DEP.ok?A(DEP.date):'À annoncer')+'</span><span>'+(DEP.time?A(DEP.time):'Heure à annoncer')+'</span><em class="stamp">Admis</em></div></div>';
  else if(s.t=='Map & Monde')h+='<div class="tk"><div class="tk-main"><div class="tk-hd"><span>Plan du train</span><i>Carte sur mesure</i></div><dl>'+s.i.map(tkRow).join('')+'</dl></div></div>';
- else h+='<div class="grid">'+s.i.map((x,i)=>{const td=x[2]&&!/\d/.test(x[1]);return'<div class="card"><span class="no">'+rmn(i+1)+'</span><h3>'+A(x[0])+'</h3><p'+(td?' class="todo"':'')+'>'+A(x[1])+'</p>'+(x[3]?'<div class="links"><button class="mini" data-to="'+x[3]+'">'+A(x[4])+'</button></div>':'')+'</div>'}).join('')+'</div>';
+ else h+='<div class="grid">'+s.i.map((x,i)=>{const td=x[2]&&!/\d/.test(x[1]);return'<div class="card"><span class="no">'+rmn(i+1)+'</span><h3>'+A(x[0])+'</h3><p'+(td?' class="todo"':'')+'>'+A(x[1])+'</p>'+(x[3]&&!flagOff(x[3])?'<div class="links"><button class="mini" data-to="'+x[3]+'">'+A(x[4])+'</button></div>':'')+'</div>'}).join('')+'</div>';
  return h}).join('')}
 /* Musique originale de l'événement : renseigne ici l'URL ou le chemin du fichier audio (mp3, ogg…) */
 const EVENT_MUSIC='Assets/Son/musiquetlvtee.mp3';
@@ -1181,7 +1184,7 @@ function rRoles(){const g=[],ix={};ROLES.forEach((r,i)=>{const t=r[0]||'';if(!(t
 function rSteps(){$('#stepB').innerHTML=STEPS.map((x,i)=>'<li>'+mk(x)+tb('steps',i)+'</li>').join('')}
 function rLinks(){$('#linkB').innerHTML=LINKS.map((l,i)=>{const off=(siteOff()||flagOff(l[0]))&&!edt;return off?'':'<div class="qlw"><button type="button" class="card ql" data-to="'+A(l[0])+'"><h3>'+A(l[1])+'</h3><p>'+A(l[2])+'</p></button>'+tb('links',i)+'</div>'}).join('')}
 function rCred(){$('#credB').innerHTML=CREDITS.map((c,i)=>'<div class="credit"><h3>'+A(c.t)+'</h3>'+c.p.map(p=>'<p>'+mk(p)+'</p>').join('')+tb('credits',i)+'</div>').join('')}
-document.addEventListener('relink:flags',rLinks);document.addEventListener('relink:editmode',rLinks);
+document.addEventListener('relink:flags',rLinks);document.addEventListener('relink:editmode',rLinks);document.addEventListener('relink:flags',()=>{try{rInfo()}catch(e){}});
 rTxt();rRoles();rSteps();rLinks();rCred();
 function rStf(){$('#stB').innerHTML='<h3 class="sec">Équipe de création</h3><div class="grid">'+STAFF.map((s,si)=>card(...s).replace(/<\/div>$/,tb('staff',si)+'</div>')).join('')+'</div>';}rStf();
 /* avatars Discord via les comptes RELINK (/search) */
@@ -1522,8 +1525,16 @@ window.rShots=function(){const g=$('.gal');g.textContent='';
  SHOTS.forEach((e,i)=>{const s=typeof e==='number'?DEFSRC[e]:safeU(e);if(!s)return;const f=document.createElement('figure'),im=new Image();im.loading='lazy';im.alt='Screenshot '+(i+1);im.src=s;f.append(im);f.insertAdjacentHTML('beforeend',tb('shots',i));g.append(f)});
  bindFigs()};
 const RK={shots:()=>rShots(),trailer:()=>rTr(),shorts:()=>window.rShorts&&rShorts(),info:()=>rInfo(),twitch:()=>window.rLive&&rLive(),rules:()=>renderLaw(),faq:()=>rFaq(),adds:()=>rAdd(),partners:()=>rPar(),staff:()=>{rStf();if(now==='staff')loadStaff()},roles:()=>rRoles(),steps:()=>rSteps(),links:()=>rLinks(),credits:()=>rCred(),infotxt:()=>rTxt(),legal:()=>renderLegal()};
+/* Le lien vers le plan est structurel : un contenu « info » enregistré sur le Worker avant son ajout ne doit pas le faire disparaître. */
+function ensurePlanRow(){
+ if(INFOS.some(s=>s.i.some(r=>r[3]==='plan')))return;
+ const row=["Plan du train","Le plan détaillé de chaque wagon, étage par étage.",0,"plan","Ouvrir le plan"];
+ let sec=INFOS.find(s=>s.t==='Map & Monde');
+ if(!sec){sec={t:'Map & Monde',i:[]};INFOS.splice(Math.min(INFOS.length,2),0,sec)}
+ sec.i.splice(Math.min(1,sec.i.length),0,row)}
 function applyContent(d){d=d||{};
  for(const k in ARR){const v=k in d?d[k]:DEF[k];if(Array.isArray(v))ARR[k].splice(0,ARR[k].length,...clone(v))}
+ ensurePlanRow();
  Object.keys(TXT).forEach(x=>delete TXT[x]);Object.assign(TXT,clone(DEF.infotxt),d.infotxt&&typeof d.infotxt==='object'&&!Array.isArray(d.infotxt)?d.infotxt:{});
  for(const lk in LEGAL){const v=d.legal&&Array.isArray(d.legal[lk])?d.legal[lk]:DEF.legal[lk];LEGAL[lk].splice(0,LEGAL[lk].length,...clone(v))}
  const t=d.trailer||DEF.trailer;TRAILER_LORE=t.lore||'';TRAILER_MECA=t.meca||'';
