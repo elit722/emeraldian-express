@@ -15,6 +15,11 @@
       "description": "Informations générales sur l'événement"
     },
     {
+      "key": "plan",
+      "label": "Plan du train",
+      "description": "Plan détaillé de chaque wagon, étage par étage (sous-page d'Informations)"
+    },
+    {
       "key": "lore",
       "label": "Lore",
       "description": "L'histoire du voyage"
